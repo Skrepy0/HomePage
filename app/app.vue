@@ -1,39 +1,50 @@
 <template>
   <div>
-    <NuxtLayout class="layout"></NuxtLayout>
-    <!-- 背景轮播组件，传入图片列表 -->
-    <BackgroundCarousel :images="backgroundImages" :interval="6000" :transition-duration="1200" />
-
-    <!-- 页面内容容器，保证在背景之上 -->
-    <div class="page-content">
-      <NuxtPage />
+    <BackgroundCarousel :images="bgImages" :interval="6000" :transition-duration="1200" />
+    <div class="content">
+      <!-- 将头像和社交卡片组合在一起，垂直排列 -->
+      <div class="profile-section">
+        <ProfileCard
+            avatar-url="/image/avatar.png"
+            username="Skrepy"
+            profile-link="https://your-website.com"
+            bilibili-url="https://space.bilibili.com/你的uid"
+            github-url="https://github.com/Skrepy0"
+            luogu-url="https://www.luogu.com.cn/user/1862372"
+            size="medium"
+        />
+      </div>
     </div>
   </div>
 </template>
 
-<script setup lang="ts">
-// 导入通过 glob 生成的图片路径数组
-import { backgroundImageUrls } from './utils/background/backgroundImages.ts'
+<script setup>
+import BackgroundCarousel from '~/components/BackgroundCarousel.vue'
+import AvatarId from '~/components/AvatarId.vue'
+import SocialBadge from '~/components/SocialBadge.vue'
+import { backgroundImageUrls } from '~/utils/background/backgroundImages'
 
-// 可直接使用
-const backgroundImages = backgroundImageUrls
+const bgImages = backgroundImageUrls
 </script>
 
-<style>
-/* 全局重置，确保背景覆盖全屏 */
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-}
-
-/* 页面内容样式：相对定位并提高层级 */
-.page-content {
+<style scoped>
+.content {
   position: relative;
   z-index: 1;
-  min-height: 100vh;      /* 至少撑满视口高度 */
-  color: white;           /* 示例文字颜色，可根据需要修改 */
-  /* 可添加内边距、背景半透明等 */
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 15vh; /* 偏上位置 */
+  box-sizing: border-box;
+}
+
+.profile-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem; /* 头像与社交卡片之间的间距 */
 }
 </style>

@@ -1,6 +1,5 @@
 <template>
   <div class="background-carousel" v-if="images.length">
-    <!-- 当前背景层 -->
     <div
         class="bg-slide"
         :style="{
@@ -8,7 +7,6 @@
         opacity: isAnimating ? 0 : 1,
       }"
     ></div>
-    <!-- 下一张背景层（过渡时显示） -->
     <div
         class="bg-slide"
         :style="{
@@ -23,39 +21,32 @@
 import { ref, onMounted, onUnmounted, watch } from 'vue'
 
 const props = defineProps({
-  images: {
-    type: Array,
-    required: true,
-    default: () => []
-  },
-  interval: {
-    type: Number,
-    default: 5000
-  },
-  transitionDuration: {
-    type: Number,
-    default: 1000
-  }
+  images: { type: Array, required: true },
+  interval: { type: Number, default: 5000 },
+  transitionDuration: { type: Number, default: 1000 } // 新增：过渡时长（毫秒）
 })
 
+// 索引初始值固定为0，确保SSR与客户端一致
 const currentIndex = ref(0)
 const nextIndex = ref(1)
-const isAnimating = ref(false)
+const isAnimating = ref(false) // 是否正在过渡
 
 let timer = null
 let transitionTimer = null
 
-// 启动轮播（仅在客户端执行）
 const startCarousel = () => {
-  // 确保只在客户端执行
-  if (process.client) {
-    stopCarousel() // 清除之前的定时器
+  // 仅在客户端执行，且至少有两张图片才启动轮播
+  if (process.client && props.images.length > 1) {
+    stopCarousel()
     timer = setInterval(() => {
+      // 如果正在过渡则跳过本次切换
       if (isAnimating.value) return
 
+      // 计算下一张索引（顺序切换，可按需改为随机）
       nextIndex.value = (currentIndex.value + 1) % props.images.length
       isAnimating.value = true
 
+      // 过渡结束后更新当前索引并关闭动画状态
       transitionTimer = setTimeout(() => {
         currentIndex.value = nextIndex.value
         isAnimating.value = false
@@ -75,24 +66,22 @@ const stopCarousel = () => {
   }
 }
 
-// 监听图片列表变化，仅当列表非空且不在服务器时重启轮播
+// 监听图片列表变化（例如动态更新图片）
 watch(() => props.images, (newImages) => {
-  if (newImages.length && process.client) {
+  if (newImages.length) {
+    // 重置索引，并重新启动轮播
     currentIndex.value = 0
     nextIndex.value = 1 % newImages.length
+    isAnimating.value = false
     stopCarousel()
     startCarousel()
   }
 }, { immediate: true })
 
-// 组件挂载后启动轮播（确保客户端）
 onMounted(() => {
-  if (props.images.length > 1) {
-    startCarousel()
-  }
+  startCarousel()
 })
 
-// 组件卸载前清理定时器
 onUnmounted(() => {
   stopCarousel()
 })
@@ -120,5 +109,6 @@ onUnmounted(() => {
   background-repeat: no-repeat;
   transition: opacity v-bind(transitionDuration + 'ms') ease;
   will-change: opacity;
+  filter: blur(5px); /* 保留您之前设置的模糊效果 */
 }
 </style>
