@@ -1,4 +1,5 @@
-// scripts/generate-background-images.js (使用ES模块语法)
+const baseURL = `/HomePage/`
+
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -41,7 +42,7 @@ function generate() {
     console.warn(`警告：在 ${IMAGE_DIR} 中没有找到任何支持的图片文件`);
   }
 
-  const urls = imageFiles.map(file => `/background/${file}`);
+  const urls = imageFiles.map(file => `${baseURL}background/${file}`);
 
   const tsContent = `// 此文件由脚本自动生成，请勿手动修改
 // 生成时间：${new Date().toLocaleString()}
