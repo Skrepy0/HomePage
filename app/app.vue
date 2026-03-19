@@ -5,7 +5,7 @@
       <!-- 将头像和社交卡片组合在一起，垂直排列 -->
       <div class="profile-section">
         <ProfileCard
-            avatar-url="/HomePage/image/avatar.png"
+            avatar-url="/image/avatar.png"
             username="Skrepy"
             profile-link="https://your-website.com"
             bilibili-url="https://space.bilibili.com/3546594102217461"

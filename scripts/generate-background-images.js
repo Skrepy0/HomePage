@@ -1,4 +1,4 @@
-const baseURL = `/HomePage/`
+const baseURL = `/`
 
 import fs from 'fs';
 import path from 'path';
