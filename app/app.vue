@@ -8,7 +8,7 @@
             avatar-url="/HomePage/image/avatar.png"
             username="Skrepy"
             profile-link="https://your-website.com"
-            bilibili-url="https://space.bilibili.com/你的uid"
+            bilibili-url="https://space.bilibili.com/3546594102217461"
             github-url="https://github.com/Skrepy0"
             luogu-url="https://www.luogu.com.cn/user/1862372"
             size="medium"
