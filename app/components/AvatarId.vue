@@ -61,9 +61,10 @@ const sizeClass = `size-${props.size}`
 }
 
 .username {
-  font-weight: 500;
+  font-weight: 600;
   line-height: 1.2;
   white-space: nowrap;
+  font-family: Blueaka, sans-serif;
 }
 
 /* 小尺寸 */
@@ -75,7 +76,7 @@ const sizeClass = `size-${props.size}`
   height: 36px;
 }
 .size-small .username {
-  font-size: 1rem;
+  font-size: 1.6rem;
 }
 
 /* 中等尺寸 */
@@ -101,7 +102,7 @@ const sizeClass = `size-${props.size}`
     height: 30px;
   }
   .size-small .username {
-    font-size: 0.9rem;
+    font-size: 1.6rem;
   }
 }
 </style>

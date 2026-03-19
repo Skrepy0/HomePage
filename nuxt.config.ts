@@ -3,7 +3,15 @@ export default defineNuxtConfig({
     compatibilityDate: '2025-07-15',
     devtools: {enabled: true},
     ssr: true,
-    // app: {
-    //     baseURL: '/HomePage/'
-    // }
+    app: {
+        head: {
+            link: [
+                {
+                    rel: 'icon',
+                    type: 'image/ico',
+                    href: '/image/favicon.ico',
+                }
+            ]
+        }
+    }
 })
