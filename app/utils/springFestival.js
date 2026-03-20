@@ -1,4 +1,5 @@
-import { lunarToSolar } from 'lunar-calendar';
+import pkg from 'lunar-calendar';
+const { lunarToSolar } = pkg;
 
 export function getSpringFestivalDate(year) {
     // 农历正月初一对应的公历日期
