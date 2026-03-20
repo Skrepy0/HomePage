@@ -10,6 +10,9 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@iconify/icons-mdi": "^1.2.48",
+    "@iconify/icons-wi": "^1.2.3",
+    "@iconify/vue": "^5.0.0",
     "lunar-calendar": "^0.1.4",
     "nuxt": "^4.4.2",
     "sf-vue-animated-cursor": "^1.0.0",

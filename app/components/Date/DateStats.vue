@@ -1,70 +1,143 @@
 <template>
-  <div class="stats-container">
-    <div class="stat-item">
-      <div class="stat-label">今日已过</div>
-      <div class="progress-bar">
-        <div class="progress-fill" :style="{ width: todayProgress + '%' }"></div>
+  <div class="stats-container" @mouseenter="flipped = true" @mouseleave="flipped = false">
+    <div class="card-inner" :class="{ flipped }">
+      <!-- 正面：统计信息 -->
+      <div class="card-front">
+        <div class="stat-item">
+          <div class="stat-label">今日已过</div>
+          <div class="progress-bar">
+            <div class="progress-fill" :style="{ width: todayProgress + '%' }"></div>
+          </div>
+          <div class="stat-value">{{ todayProgress }}%</div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-label">本月已过</div>
+          <div class="progress-bar">
+            <div class="progress-fill" :style="{ width: thisMonthProgress + '%' }"></div>
+          </div>
+          <div class="stat-value">{{ thisMonthProgress }}%</div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-label">今年已过</div>
+          <div class="progress-bar">
+            <div class="progress-fill" :style="{ width: yearProgress + '%' }"></div>
+          </div>
+          <div class="stat-value">{{ yearProgress }}%</div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-label">距离春节</div>
+          <div class="stat-value">{{ daysToSpringFestival }} 天</div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-label">主页已运行</div>
+          <div class="stat-value">{{ siteRunningDays }} 天</div>
+        </div>
       </div>
-      <div class="stat-value">{{ todayProgress }}%</div>
-    </div>
 
-    <div class="stat-item">
-      <div class="stat-label">本月已过</div>
-      <div class="progress-bar">
-        <div class="progress-fill" :style="{ width: thisMonthProgress + '%' }"></div>
+      <!-- 背面：贪吃蛇动画 -->
+      <div class="card-back">
+        <!-- 上半部分：统计区域（居中） -->
+        <div class="stats-github">
+          <div class="stat-item">
+            <!-- 图标适当缩小，避免过大 -->
+            <svg class="github-icon" viewBox="0 0 1024 1024" width="28" height="28">
+              <!-- 这里可以放入您优化后的图标路径，建议移除非标准的 p-id 属性 -->
+              <path d="M512 384a128 128 0 1 0 0 256 128 128 0 0 0 0-256zM302.912 469.312a213.376 213.376 0 0 1 418.176 0h260.224v85.376h-260.224a213.44 213.44 0 0 1-418.176 0H42.688V469.312h260.224z" fill="currentColor"/>
+            </svg>
+            <span class="stat-label"><a class="repository-path" href = "https://github.com/Skrepy0/HomePage" target="_blank">Skrepy's Home Page</a></span>
+            <span class="stat-value">{{ commitCount }}</span>
+            <span class="stat-label">次提交</span>
+          </div>
+        </div>
+        <!-- 下半部分：蛇形图区域 -->
+        <div class="snake-container">
+          <!-- 加载中状态 -->
+          <div v-if="snakeLoading" class="loading-placeholder">
+            <span>正在加载...</span>
+          </div>
+
+          <!-- 加载成功显示图片 -->
+          <img
+              v-else-if="snakeLoaded"
+              v-bind:src='props.isDark?snakeUrlDark:snakeUrl'
+              alt="GitHub Contribution Snake"
+              class="snake-image"
+              loading="lazy"
+              @load="handleLoad"
+              @error="handleError"
+          />
+
+          <!-- 加载失败显示提示 -->
+          <div v-else class="error-placeholder">
+            <span>图片加载失败</span>
+          </div>
+        </div>
+        <div class="snake-caption">GitHub Commit</div>
       </div>
-      <div class="stat-value">{{ thisMonthProgress }}%</div>
-    </div>
-
-    <div class="stat-item">
-      <div class="stat-label">今年已过</div>
-      <div class="progress-bar">
-        <div class="progress-fill" :style="{ width: yearProgress + '%' }"></div>
-      </div>
-      <div class="stat-value">{{ yearProgress }}%</div>
-    </div>
-
-    <!-- 距离春节 -->
-    <div class="stat-item">
-      <div class="stat-label">距离春节</div>
-      <div class="stat-value">{{ daysToSpringFestival }} 天</div>
-    </div>
-
-    <!-- 运行天数 -->
-    <div class="stat-item">
-      <div class="stat-label">主页已运行</div>
-      <div class="stat-value">{{ siteRunningDays }} 天</div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-
+import { getSpringFestivalDate } from '~/utils/springFestival'
+import {useGitHubCommits} from "~/utils/composables/useGitHubCommits";
 const props = defineProps<{
   size?: 'small' | 'medium'
   startDate?: string
   springFestivalDate?: string
   isDark?: boolean
 }>()
+const { commitCount, loading, error, fetchCommitCount } = useGitHubCommits('Skrepy0', 'HomePage')
+let snakeUrlDark="https://raw.githubusercontent.com/Skrepy0/HomePage/output/github-contribution-grid-snake-dark.svg"
+let snakeUrl = "https://raw.githubusercontent.com/Skrepy0/HomePage/output/github-contribution-grid-snake.svg"
+let snakeLoading = ref(true)
+let snakeLoaded = ref(false)
+const handleLoad = () => {
+  snakeLoading.value = false
+  snakeLoaded.value = true
+}
+const handleError = () => {
+  snakeLoading.value = false
+  snakeLoaded.value = false
+}
 
-// 当前时间（客户端），服务端为 null
+const flipped = ref(false)
 const now = ref<Date | null>(null)
-
 let timer: ReturnType<typeof setInterval> | null = null
-
 onMounted(() => {
-  now.value = new Date() // 仅在客户端初始化
+  fetchCommitCount()
+  now.value = new Date()
   timer = setInterval(() => {
     now.value = new Date()
-  }, 10000) // 每分钟更新
+  }, 10000) // 10秒更新一次，可调整
 })
+onMounted(() => {
+  fetchCommitCount()
+  now.value = new Date()
+  timer = setInterval(() => {
+    now.value = new Date()
+  }, 10000)
 
+  // 手动检测图片加载状态，防止错过事件
+  const img = new Image()
+  img.src = snakeUrl
+  if (img.complete) {
+    // 图片已加载完成（缓存）
+    handleLoad()
+  } else {
+    img.onload = handleLoad
+    img.onerror = handleError
+  }
+})
 onUnmounted(() => {
   if (timer) clearInterval(timer)
 })
 
-// 今日进度（如果未挂载则显示 '--'）
 const todayProgress = computed<string>(() => {
   const current = now.value
   if (!current) return '--'
@@ -76,7 +149,6 @@ const todayProgress = computed<string>(() => {
   return progress.toFixed(1)
 })
 
-// 本月进度（类似）
 const thisMonthProgress = computed<string>(() => {
   const current = now.value
   if (!current) return '--'
@@ -88,7 +160,6 @@ const thisMonthProgress = computed<string>(() => {
   return ((passedDays / totalDays) * 100).toFixed(1)
 })
 
-// 今年进度
 const yearProgress = computed<string>(() => {
   const current = now.value
   if (!current) return '--'
@@ -114,7 +185,6 @@ const daysToSpringFestival = computed<number>(() => {
   return days >= 0 ? days : 0
 })
 
-// 网站运行天数
 const siteRunningDays = computed<number>(() => {
   const current = now.value
   if (!current) return 0
@@ -126,30 +196,56 @@ const siteRunningDays = computed<number>(() => {
 </script>
 
 <style scoped>
+@import "../../../assets/css/components/date-stats/github.css";
 .stats-container {
+  perspective: 1000px;          /* 透视效果，让翻转有立体感 */
+  cursor: pointer;
+  width: fit-content;
+  margin-top: 20px;
+  /* 移除之前与翻转冲突的过渡和背景样式，这些由内部元素处理 */
+}
+
+.card-inner {
+  position: relative;
+  width: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  border-radius: 24px;
+}
+
+.card-inner.flipped {
+  transform: rotateX(180deg);   /* 上下翻转 */
+}
+
+.card-front,
+.card-back {
+  width: 100%;
+  backface-visibility: hidden;  /* 隐藏背面，防止正面看到反面 */
+  border-radius: 24px;
+  padding: 1.2rem;
+  box-sizing: border-box;
   background: v-bind('props.isDark ? "rgba(155, 155, 155, 0.3)" : "rgba(0, 0, 0, 0.3)"');
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 24px;
-  padding: 1.2rem;
   color: white;
-  width: fit-content;
-  margin-top: 20px;
   display: flex;
   flex-direction: column;
-  transition: background 0.5s ease;
   gap: 12px;
 }
 
-/* 尺寸变体 */
-.stats-small {
-  width: 280px;
+.card-back {
+  position: absolute;           /* 与正面重叠，通过旋转决定显示哪一面 */
+  top: 0;
+  left: 0;
+  transform: rotateX(180deg);   /* 背面默认旋转180度，使其朝后 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;            /* 确保背面有足够高度 */
 }
 
-.stats-medium {
-  width: 360px;
-}
+/* 正面不需要额外定位，默认 relative 即可 */
 
 .stat-item {
   display: flex;
@@ -185,94 +281,5 @@ const siteRunningDays = computed<number>(() => {
   background: rgba(255, 255, 255, 0.8);
   border-radius: 4px;
   transition: width 0.3s ease;
-}
-
-/* 中等尺寸微调 */
-.stats-medium .stat-label {
-  flex-basis: 100px;
-}
-
-.stats-medium .stat-value {
-  min-width: 70px;
-}
-
-/* 响应式调整 - 优化移动端显示 */
-@media (max-width: 480px) {
-  /* 所有卡片通用：限制最大宽度，左右留边距 */
-  .profile-card {
-    max-width: calc(100vw - 30px);
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  /* 小尺寸（默认） */
-  .size-small {
-    padding: 0.4rem 0.8rem 0.4rem 0.6rem;
-    gap: 0.5rem;
-  }
-  .size-small .avatar {
-    width: 48px;   /* 原60px，调小 */
-    height: 48px;
-  }
-  .size-small .username {
-    font-size: 1.2rem; /* 原1.8rem，调小 */
-  }
-  .size-small .icon {
-    width: 26px;
-    height: 26px;
-  }
-
-  /* 中等尺寸移动端适配 */
-  .size-medium {
-    padding: 0.5rem 1rem 0.5rem 0.75rem;
-    gap: 0.75rem;
-  }
-  .size-medium .avatar {
-    width: 56px;
-    height: 56px;
-  }
-  .size-medium .username {
-    font-size: 1.4rem;
-  }
-  .size-medium .icon {
-    width: 30px;
-    height: 30px;
-  }
-
-  /* 社交链接间距 */
-  .social-links {
-    gap: 0.4rem;
-    padding-right: 0.25rem;
-  }
-
-  /* tooltip 移动端优化：避免超出屏幕，自动换行 */
-  .profile-info::after,
-  .social-link::after {
-    font-size: 11px;
-    padding: 3px 6px;
-    white-space: normal;      /* 允许换行 */
-    max-width: 150px;
-    text-align: center;
-    bottom: 130%;             /* 适当调整位置 */
-  }
-  .profile-info::before,
-  .social-link::before {
-    bottom: 120%;
-    border-width: 4px;
-  }
-}
-
-.stats-container {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.stats-container:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 20px 30px v-bind('props.isDark ? "rgba(255, 255, 255, 0.5)" : "rgba(0, 0, 0, 0.3)"');
-}
-
-.stats-container:active {
-  transform: scale(0.97);
-  transition: transform 0.1s;
 }
 </style>
