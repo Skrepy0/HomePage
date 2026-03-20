@@ -1,0 +1,31 @@
+{
+  "colors": {
+    "JavaScript": "#f1e05a",
+    "TypeScript": "#2b7489",
+    "Python": "#3572A5",
+    "Java": "#b07219",
+    "Go": "#00ADD8",
+    "Rust": "#dea584",
+    "C++": "#f34b7d",
+    "C": "#555555",
+    "C#": "#178600",
+    "HTML": "#e34c26",
+    "CSS": "#563d7c",
+    "Vue": "#41b883",
+    "React": "#61dafb",
+    "Swift": "#ffac45",
+    "Kotlin": "#F18E33",
+    "PHP": "#4F5D95",
+    "Ruby": "#701516",
+    "Shell": "#89e051",
+    "Markdown": "#083fa1",
+    "Dart": "#00B4AB",
+    "Lua": "#000080",
+    "R": "#198CE7",
+    "Scala": "#c22d40",
+    "Perl": "#0298c3",
+    "Haskell": "#5e5086",
+    "Elixir": "#6e4a7e",
+    "Clojure": "#db5855"
+  }
+}

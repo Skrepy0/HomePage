@@ -23,7 +23,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 
 // 正面时间日期
@@ -156,7 +156,6 @@ onUnmounted(() => {
   width: 100%;
   border-radius: 24px;
   perspective: 1000px;
-  cursor: pointer;
 }
 
 .card-inner {
@@ -202,7 +201,7 @@ onUnmounted(() => {
   font-weight: 600;
   line-height: 1.2;
   letter-spacing: 2px;
-  font-family: "Comic Sans MS",cursive;
+  font-family: "Comic",cursive;
 }
 
 .date {
@@ -226,6 +225,8 @@ onUnmounted(() => {
   border-right: 2px solid rgba(255, 255, 255, 0.7);
   width: fit-content;
   margin: 0 auto;
+  font-size: 1.8rem;
+  font-family: "HuaWenKaiTi","Comic Sans MS", cursive;
   animation: blink-caret 0.75s step-end infinite;
 }
 

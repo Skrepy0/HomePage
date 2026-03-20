@@ -1,5 +1,7 @@
 <template>
-  <index/>
+  <div class="dynamic-cursor">
+    <index/>
+  </div>
 </template>
 
 <script setup>
@@ -10,4 +12,8 @@ useHead({
 </script>
 
 <style scoped>
+@import "../assets/css/fonts.css";
+.dynamic-cursor {
+  cursor: url("../public/image/cursor.cur"), auto;
+}
 </style>

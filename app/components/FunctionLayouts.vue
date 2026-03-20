@@ -53,10 +53,11 @@ button {
   -webkit-backdrop-filter: blur(8px);
   border: 1px solid v-bind('props.isDark ? "rgba(255, 255, 255, 0.3)":"rgba(0, 0, 0, 0.3)"'); /* 浅灰色边框 */
   color: white;  /* 图标保持白色，与灰色背景对比清晰 */
-  cursor: pointer;
   transition: all 0.5s ease;
 }
-
+button{
+  cursor: url("../../public/image/cursor.cur"), auto;
+}
 button:hover {
   background: v-bind('props.isDark ? "rgba(255, 255, 255, 0.5)":"rgba(0, 0, 0, 0.3)"'); /* 悬停时稍亮 */
   border-color: v-bind('props.isDark ? "rgba(255, 255, 255, 0.3)":"rgba(0, 0, 0, 0.3)"');

@@ -23,12 +23,12 @@
         {{ date.day }}
       </div>
     </div>
+    <Quote/>
   </div>
 </template>
 
 <script setup lang = "ts">
 import { ref, computed } from 'vue'
-
 const props = defineProps({
   size: {
     type: String,
@@ -36,7 +36,6 @@ const props = defineProps({
   },
   isDark:{type:Boolean,default:false}
 })
-
 const sizeClass = `calendar-${props.size}`
 
 // 当前显示的日期（年、月）
@@ -102,6 +101,9 @@ const nextMonth = () => {
 </script>
 
 <style scoped>
+button{
+  cursor: url("../../../public/image/cursor.cur"), auto;
+}
 .calendar-container {
   background: v-bind('props.isDark ? "rgba(155, 155, 155, 0.3)" : "rgba(0, 0, 0, 0.3)"');
   transition: background 1s ease;
@@ -138,7 +140,6 @@ const nextMonth = () => {
   height: 32px;
   border-radius: 50%;
   font-size: 1.2rem;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -178,7 +179,6 @@ const nextMonth = () => {
   font-size: 0.9rem;
   border-radius: 50%;
   transition: background 0.2s;
-  cursor: default;
 }
 
 .date-cell.other-month {
