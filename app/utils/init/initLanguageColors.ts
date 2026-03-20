@@ -1,5 +1,2 @@
-export let LanguageColors = {}
-const path:string = "/text/language.json"
-fetch(path).then(res => res.json()).then(json => {
-    LanguageColors = json["colors"];
-})
+import colorsData from '../../../public/text/language.json'
+export const LanguageColors = colorsData.colors
