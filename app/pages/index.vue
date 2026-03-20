@@ -1,6 +1,7 @@
 <template>
   <div>
-    <BackgroundCarousel ref="carouselRef" :images="bgImages" :interval="15000" :transition-duration="2000" :isDark="isDark"/>
+    <BackgroundCarousel ref="carouselRef" :images="bgImages" :interval="15000" :transition-duration="2000"
+                        :isDark="isDark"/>
     <div class="profile-calendar-stats-wrapper">
       <FunctionLayouts :onSwitch="handleSwitch" :switchLightDark="switchLightDark" :isDark="isDark"></FunctionLayouts>
       <div class="content">
@@ -18,13 +19,15 @@
                 size="medium"
                 :isDark="isDark"
             />
-            <Calendar size="small" :isDark="isDark"/>
+            <ClientOnly>
+              <Calendar size="small" :isDark="isDark"/>
+            </ClientOnly>
           </div>
 
           <!-- 右侧组：TimeBox + DateStats -->
           <div class="right-group">
             <TimeBox :isDark="isDark"/>
-            <DateStats size="medium" startDate="2026-03-19" :isDark="isDark" />
+            <DateStats size="medium" startDate="2026-03-19" :isDark="isDark"/>
           </div>
         </div>
       </div>
@@ -36,16 +39,16 @@
 import BackgroundCarousel from '~/components/BackgroundCarousel.vue'
 import {backgroundImageUrls} from '~/utils/background/backgroundImages'
 import FunctionLayouts from '~/components/FunctionLayouts.vue'
-import {ref} from 'vue'
+import {ref, onMounted} from 'vue'
 import TimeBox from "~/components/Date/TimeBox.vue";
 import Calendar from "~/components/Date/Calendar.vue";
+
 // 主题状态：true 表示暗色，false 表示亮色
 const isDark = ref(false)
 
 // 切换主题的方法
 const switchLightDark = () => {
   isDark.value = !isDark.value
-  // 可选：将主题偏好保存到 localStorage
   localStorage.setItem('theme', isDark.value ? 'dark' : 'light')
 }
 
@@ -56,6 +59,7 @@ onMounted(() => {
     isDark.value = true
   }
 })
+
 const carouselRef = ref()
 const handleSwitch = () => {
   carouselRef.value?.next();
@@ -67,12 +71,13 @@ const bgImages = backgroundImageUrls
 .content {
   position: relative;
   z-index: 1;
-  height: 100vh;
+  min-height: 100vh;                /* 改为 min-height 允许内容撑开 */
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;      /* 改为顶部对齐，不再垂直居中 */
   box-sizing: border-box;
-  padding: 20px;
+  padding: 15vh 20px 20px 20px;     /* 增加顶部内边距，整体下移 */
 }
 
 .cards-row {
@@ -89,30 +94,40 @@ const bgImages = backgroundImageUrls
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  align-items: center;  /* 内部卡片水平居中 */
+  align-items: center; /* 内部卡片水平居中 */
 }
 
 .right-group {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  width: 360px;         /* 与 DateStats medium 宽度一致 */
+  width: 360px; /* 与 DateStats medium 宽度一致 */
 }
 
 .right-group > * {
-  width: 100%;          /* 强制 TimeBox 和 DateStats 宽度填满 */
+  width: 100%; /* 强制 TimeBox 和 DateStats 宽度填满 */
 }
 
 /* 响应式调整 */
 @media (max-width: 768px) {
+  .content {
+    padding-top: 20px;             /* 手机上适当加大顶部间距 */
+  }
+
   .cards-row {
     flex-direction: column;
     align-items: center;
     gap: 1.5rem;
   }
+
+  .left-group,
   .right-group {
     width: 100%;
-    max-width: 360px;   /* 保持中等尺寸宽度 */
+    max-width: 360px;
+  }
+
+  .right-group {
+    max-width: 360px;
   }
 }
 </style>

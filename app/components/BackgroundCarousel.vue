@@ -20,7 +20,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="js">
 import { ref, onMounted, onUnmounted, watch } from 'vue'
 
 const props = defineProps({

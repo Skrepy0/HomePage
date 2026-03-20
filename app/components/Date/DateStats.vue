@@ -1,5 +1,5 @@
 <template>
-  <div class="stats-container" :class="sizeClass">
+  <div class="stats-container">
     <div class="stat-item">
       <div class="stat-label">今日已过</div>
       <div class="progress-bar">
@@ -30,125 +30,96 @@
       <div class="stat-value">{{ daysToSpringFestival }} 天</div>
     </div>
 
-    <!-- 网站运行天数 -->
+    <!-- 运行天数 -->
     <div class="stat-item">
-      <div class="stat-label">网站已运行</div>
+      <div class="stat-label">主页已运行</div>
       <div class="stat-value">{{ siteRunningDays }} 天</div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import {ref, computed, onMounted} from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 
-const props = defineProps({
-  size: {
-    type: String,
-    default: 'small', // 'small' 或 'medium'
-  },
-  startDate: {
-    type: String,
-    default: '2025-01-01', // 网站启动日期，格式 YYYY-MM-DD
-  },
-  // 可传入自定义春节日期，格式 YYYY-MM-DD，如果不传则使用内部映射
-  springFestivalDate: {
-    type: String,
-    default: '',
-  },
-  isDark: {
-    type: Boolean,
-    default: false,
-  }
-})
+const props = defineProps<{
+  size?: 'small' | 'medium'
+  startDate?: string
+  springFestivalDate?: string
+  isDark?: boolean
+}>()
 
-const sizeClass = `stats-${props.size}`
+// 当前时间（客户端），服务端为 null
+const now = ref<Date | null>(null)
 
-// 当前时间
-const now = ref(new Date())
+let timer: ReturnType<typeof setInterval> | null = null
 
-// 每分钟更新一次（可选）
 onMounted(() => {
-  const timer = setInterval(() => {
+  now.value = new Date() // 仅在客户端初始化
+  timer = setInterval(() => {
     now.value = new Date()
-  }, 60000) // 每分钟更新，进度条变化平滑
-  // 组件卸载时清除定时器
-  return () => clearInterval(timer)
+  }, 10000) // 每分钟更新
 })
 
-const todayProgress = computed(() => {
+onUnmounted(() => {
+  if (timer) clearInterval(timer)
+})
+
+// 今日进度（如果未挂载则显示 '--'）
+const todayProgress = computed<string>(() => {
   const current = now.value
-  const startOfDay = new Date(current)
-  startOfDay.setHours(0, 0, 0, 0)
-  const endOfDay = new Date(current)
-  endOfDay.setHours(23, 59, 59, 999)
+  if (!current) return '--'
+  const startOfDay = new Date(current).setHours(0, 0, 0, 0)
+  const endOfDay = new Date(current).setHours(23, 59, 59, 999)
   const totalMs = endOfDay - startOfDay
-  const elapsedMs = current - startOfDay
+  const elapsedMs = current.getTime() - startOfDay
   const progress = (elapsedMs / totalMs) * 100
   return progress.toFixed(1)
 })
 
-const thisMonthProgress = computed(() => {
+// 本月进度（类似）
+const thisMonthProgress = computed<string>(() => {
   const current = now.value
+  if (!current) return '--'
   const year = current.getFullYear()
   const month = current.getMonth()
   const lastDay = new Date(year, month + 1, 0)
   const totalDays = lastDay.getDate()
   const passedDays = current.getDate()
-  const percentage = (passedDays / totalDays) * 100
-  return percentage.toFixed(1)
+  return ((passedDays / totalDays) * 100).toFixed(1)
 })
 
-const yearProgress = computed(() => {
+// 今年进度
+const yearProgress = computed<string>(() => {
   const current = now.value
+  if (!current) return '--'
   const year = current.getFullYear()
   const startOfYear = new Date(year, 0, 1)
   const endOfYear = new Date(year, 11, 31, 23, 59, 59, 999)
-  const totalDays = (endOfYear - startOfYear) / (1000 * 60 * 60 * 24) + 1 // 包含最后一天
-  const elapsedDays = (current - startOfYear) / (1000 * 60 * 60 * 24)
+  const totalDays = (endOfYear.getTime() - startOfYear.getTime()) / (1000 * 60 * 60 * 24) + 1
+  const elapsedDays = (current.getTime() - startOfYear.getTime()) / (1000 * 60 * 60 * 24)
   const progress = (elapsedDays / totalDays) * 100
-  return Math.min(100, progress.toFixed(1))
+  return Math.min(100, progress).toFixed(1)
 })
 
-// 获取春节日期（若传入则使用，否则使用内部硬编码）
-const getSpringFestivalDate = (year) => {
-  if (props.springFestivalDate) {
-    return new Date(props.springFestivalDate)
-  }
-  // 硬编码未来几年的春节（公历日期）
-  const map = {
-    2024: '2024-02-10',
-    2025: '2025-01-29',
-    2026: '2026-02-17',
-    2027: '2027-02-06',
-    2028: '2028-01-26',
-    2029: '2029-02-13',
-    2030: '2030-02-03',
-  }
-  if (map[year]) return new Date(map[year])
-  // 若年份不在映射中，则默认使用当年2月1日（仅为后备）
-  return new Date(year, 1, 1)
-}
-
-// 距离下一个春节的天数
-const daysToSpringFestival = computed(() => {
+const daysToSpringFestival = computed<number>(() => {
   const current = now.value
+  if (!current) return 0
   const currentYear = current.getFullYear()
-  // 获取今年春节日期
   let festival = getSpringFestivalDate(currentYear)
-  // 如果今年春节已过，则取明年春节
   if (current > festival) {
     festival = getSpringFestivalDate(currentYear + 1)
   }
-  const diffMs = festival - current
+  const diffMs = festival.getTime() - current.getTime()
   const days = Math.ceil(diffMs / (1000 * 60 * 60 * 24))
   return days >= 0 ? days : 0
 })
 
 // 网站运行天数
-const siteRunningDays = computed(() => {
-  const start = new Date(props.startDate)
+const siteRunningDays = computed<number>(() => {
   const current = now.value
-  const diffMs = current - start
+  if (!current) return 0
+  const start = new Date(props.startDate || '2025-01-01')
+  const diffMs = current.getTime() - start.getTime()
   const days = Math.floor(diffMs / (1000 * 60 * 60 * 24))
   return days >= 0 ? days : 0
 })
@@ -156,7 +127,7 @@ const siteRunningDays = computed(() => {
 
 <style scoped>
 .stats-container {
-  background:  v-bind('props.isDark ? "rgba(155, 155, 155, 0.3)":"rgba(0, 0, 0, 0.3)"');
+  background: v-bind('props.isDark ? "rgba(155, 155, 155, 0.3)" : "rgba(0, 0, 0, 0.3)"');
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -225,22 +196,69 @@ const siteRunningDays = computed(() => {
   min-width: 70px;
 }
 
-/* 响应式 */
+/* 响应式调整 - 优化移动端显示 */
 @media (max-width: 480px) {
-  .stats-small {
-    width: 240px;
+  /* 所有卡片通用：限制最大宽度，左右留边距 */
+  .profile-card {
+    max-width: calc(100vw - 30px);
+    margin-left: auto;
+    margin-right: auto;
   }
 
-  .stats-medium {
-    width: 300px;
+  /* 小尺寸（默认） */
+  .size-small {
+    padding: 0.4rem 0.8rem 0.4rem 0.6rem;
+    gap: 0.5rem;
+  }
+  .size-small .avatar {
+    width: 48px;   /* 原60px，调小 */
+    height: 48px;
+  }
+  .size-small .username {
+    font-size: 1.2rem; /* 原1.8rem，调小 */
+  }
+  .size-small .icon {
+    width: 26px;
+    height: 26px;
   }
 
-  .stat-item {
-    font-size: 0.85rem;
+  /* 中等尺寸移动端适配 */
+  .size-medium {
+    padding: 0.5rem 1rem 0.5rem 0.75rem;
+    gap: 0.75rem;
+  }
+  .size-medium .avatar {
+    width: 56px;
+    height: 56px;
+  }
+  .size-medium .username {
+    font-size: 1.4rem;
+  }
+  .size-medium .icon {
+    width: 30px;
+    height: 30px;
   }
 
-  .stat-label {
-    flex-basis: 70px;
+  /* 社交链接间距 */
+  .social-links {
+    gap: 0.4rem;
+    padding-right: 0.25rem;
+  }
+
+  /* tooltip 移动端优化：避免超出屏幕，自动换行 */
+  .profile-info::after,
+  .social-link::after {
+    font-size: 11px;
+    padding: 3px 6px;
+    white-space: normal;      /* 允许换行 */
+    max-width: 150px;
+    text-align: center;
+    bottom: 130%;             /* 适当调整位置 */
+  }
+  .profile-info::before,
+  .social-link::before {
+    bottom: 120%;
+    border-width: 4px;
   }
 }
 
@@ -250,7 +268,7 @@ const siteRunningDays = computed(() => {
 
 .stats-container:hover {
   transform: translateY(-6px);
-  box-shadow: 0 20px 30px v-bind('props.isDark ? "rgba(255, 255, 255, 0.5)":"rgba(0, 0, 0, 0.3)"');
+  box-shadow: 0 20px 30px v-bind('props.isDark ? "rgba(255, 255, 255, 0.5)" : "rgba(0, 0, 0, 0.3)"');
 }
 
 .stats-container:active {
