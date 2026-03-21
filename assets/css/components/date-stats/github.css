@@ -138,3 +138,26 @@
         padding-top: 0.3rem;
     }
 }
+/* GitHub 统计项 - 强制保持在一行 */
+.github-stats-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    justify-content: flex-start;
+}
+
+.github-stats-item .stat-value,
+.github-stats-item .stat-label {
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.github-stats-item .repository-path {
+    white-space: nowrap;
+    flex-shrink: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+}

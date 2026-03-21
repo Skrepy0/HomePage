@@ -11,9 +11,16 @@ useHead({
 })
 </script>
 
-<style scoped>
-@import "../assets/css/fonts.css";
+<style scoped lang="scss">
+@import "../assets/css/fonts";
+@import "../assets/css/main.scss";
 .dynamic-cursor {
-  cursor: url("../public/image/cursor.cur"), auto;
+  @extend .cursor-normal;
+}
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
 }
 </style>

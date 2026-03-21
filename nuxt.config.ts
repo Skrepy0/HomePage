@@ -2,6 +2,15 @@ export default defineNuxtConfig({
     compatibilityDate: '2025-07-15',
     devtools: { enabled: true },
     ssr: true,
+    vite: {
+        css: {
+            preprocessorOptions: {
+                scss: {
+                    silenceDeprecations: ['import'],   // 抑制 @import 弃用警告
+                },
+            },
+        },
+    },
     app: {
         head: {
             meta: [
