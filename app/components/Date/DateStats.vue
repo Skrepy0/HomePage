@@ -2,7 +2,7 @@
   <div class="stats-container" @mouseenter="flipped = true" @mouseleave="flipped = false">
     <div class="card-inner" :class="{ flipped }">
       <!-- 正面：统计信息 -->
-      <div class="card-front">
+      <div class="card-back">
         <div class="stat-item">
           <div class="stat-label">今日已过</div>
           <div class="progress-bar">
@@ -39,7 +39,7 @@
       </div>
 
       <!-- 背面：语言统计 + 贪吃蛇动画 -->
-      <div class="card-back">
+      <div class="card-front">
         <!-- 上半部分：GitHub 统计区域 - 保持在一行 -->
         <div class="stats-github">
           <div class="stat-item github-stats-item">
@@ -245,7 +245,7 @@ onUnmounted(() => {
 .stats-container {
   perspective: 1000px;
   width: fit-content;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .card-inner {
@@ -482,7 +482,7 @@ onUnmounted(() => {
 
 /* 翻转后背面下移效果 */
 .card-inner.flipped .card-back {
-  transform: rotateX(180deg) translateY(180px);
+  transform: rotateX(180deg) translateY(-190px);
   transition: transform 0.6s;
 }
 </style>

@@ -114,7 +114,7 @@ button{
   padding: 1rem;
   color: white;
   width: fit-content;
-  margin-top: 20px; /* 与上方组件的间距 */
+  margin-top: 0; /* 与上方组件的间距 */
 }
 
 /* 尺寸变体 */

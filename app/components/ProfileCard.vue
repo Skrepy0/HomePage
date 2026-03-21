@@ -101,7 +101,7 @@ const sizeClass = `size-${props.size}`
   gap: 1rem;
   background: v-bind('props.isDark ? "rgba(155, 155, 155, 0.3)":"rgba(0, 0, 0, 0.3)"');
   backdrop-filter: blur(12px);
-  border-radius: 60px;
+  border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   color: white;
