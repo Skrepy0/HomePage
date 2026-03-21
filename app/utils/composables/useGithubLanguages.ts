@@ -175,7 +175,7 @@ export function useGithubLanguages(username: string) {
     // 转换为数组并排序
     const sorted = Object.entries(combined)
       .sort((a, b) => b[1] - a[1])
-      .slice(0, 3) // 取前n种语言
+      .slice(0, 6) // 取前n种语言
       .map(([name, bytes]) => ({ name, bytes }))
 
     // 计算百分比

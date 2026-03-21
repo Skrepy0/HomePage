@@ -254,7 +254,7 @@ const getLanguageColor = (language: string): string => {
   return colors[language]
 }
 
-// 时间进度计算函数（保持不变）
+// 时间进度计算函数
 const todayProgress = computed<string>(() => {
   const current = now.value
   if (!current) return '--'
@@ -312,15 +312,15 @@ const siteRunningDays = computed<number>(() => {
   const days = Math.floor(diffMs / (1000 * 60 * 60 * 24))
   return days >= 0 ? days : 0
 })
+
 // 根据语言统计是否加载成功，动态调整翻转后的偏移量
 const backTranslateY = computed(() => {
-  // 如果语言统计加载成功且有数据，偏移量大一些
   if (languages.value.length > 0) {
-    return '180px'
+    return '135px'
   }
-  // 如果语言统计正在加载或失败，偏移量小一些（避免多余空白）
-  return '90px'
+  return '70px'
 })
+
 // 生命周期
 onMounted(() => {
   fetchCommitCount()
@@ -351,6 +351,7 @@ onUnmounted(() => {
 @import '../../../assets/css/components/date-stats/github.css';
 @import '../../../assets/css/components/container.scss';
 @import '../../../assets/css/main.scss';
+
 a {
   @extend .cursor-solid;
 }
@@ -361,6 +362,7 @@ a {
 .languages-error:hover {
   text-decoration: underline;
 }
+
 .stats-container {
   perspective: 1000px;
   width: fit-content;
@@ -399,7 +401,6 @@ a {
   top: 0;
   left: 0;
   transform: rotateX(180deg);
-  min-height: 200px;
 }
 
 /* 语言统计区域 */
@@ -408,10 +409,11 @@ a {
   background: rgba(0, 0, 0, 0.2);
   border-radius: 15px;
   text-align: center;
-  min-height: 110px;
   min-width: 200px;
   padding: 0.75rem;
   margin-left: -12px;
+  margin-top: -8px;
+  margin-bottom: -8px;
 }
 
 .section-title {
@@ -423,20 +425,23 @@ a {
 }
 
 .language-list {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 0.5rem;
+  justify-items: start;
+  align-items: center;
 }
 
 .language-item {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   font-size: 0.85rem;
+  width: 100%;
 }
 
 .lang-name {
-  flex: 0 0 60px;
+  flex: 0 0 50px;
   font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
@@ -459,8 +464,8 @@ a {
 }
 
 .lang-percent {
-  flex: 0 0 45px;
-  font-size: 0.75rem;
+  flex: 0 0 40px;
+  font-size: 0.7rem;
   color: rgba(255, 255, 255, 0.7);
   text-align: right;
 }
@@ -473,7 +478,7 @@ a {
   padding: 0.5rem 0;
 }
 
-/* 其他样式保持原有 */
+/* 其他样式 */
 .stat-item {
   display: flex;
   align-items: center;
@@ -553,19 +558,15 @@ a {
     max-width: 100px;
   }
 
-  .language-item {
-    font-size: 0.7rem;
-    gap: 4px;
+  .language-list {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.4rem;
   }
-
   .lang-name {
-    flex: 0 0 50px;
-    font-size: 0.7rem;
+    flex: 0 0 45px;
   }
-
   .lang-percent {
-    flex: 0 0 40px;
-    font-size: 0.65rem;
+    flex: 0 0 35px;
   }
 
   .section-title {
@@ -599,5 +600,7 @@ a {
   display: inline-flex;
   align-items: center;
   gap: 4px;
+}
+.languages-section {
 }
 </style>

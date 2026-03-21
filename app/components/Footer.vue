@@ -41,7 +41,6 @@ const currentYear = new Date().getFullYear()
 .footer {
   border-radius: 3px;
   left: 0;
-  margin-top: 3rem;
   padding: 1.5rem 1rem;
   background: rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(12px);
@@ -51,6 +50,8 @@ const currentYear = new Date().getFullYear()
   text-align: center;
   transition: background 0.8s ease;
   flex: 1px;
+  width: 100%;
+  margin-top: 50px;
 }
 
 /* 暗色主题微调 */

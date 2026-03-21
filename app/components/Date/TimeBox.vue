@@ -193,7 +193,7 @@ onUnmounted(() => {
 .card-inner {
   position: relative;
   width: 100%;
-  height: 180px;
+  height: 140px;
   transition: transform 0.6s;
   transform-style: preserve-3d;
   border-radius: 24px;
@@ -276,7 +276,7 @@ onUnmounted(() => {
 
 @media (max-width: 480px) {
   .card-inner {
-    height: 140px;
+    height: 130px;
   }
   .time {
     font-size: 2rem;
