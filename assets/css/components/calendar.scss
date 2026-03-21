@@ -55,7 +55,9 @@
 }
 
 .date-cell.other-month {
-  color: v-bind('props.isDark ? "rgba(0, 0, 0, 0.3)" : "rgba(255, 255, 255, 0.4)"');
+  color: v-bind(
+    'props.isDark ? "rgba(0, 0, 0, 0.3)" : "rgba(255, 255, 255, 0.4)"'
+  );
 }
 
 .date-cell.today {

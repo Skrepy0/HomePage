@@ -1,5 +1,10 @@
 <template>
-  <div class="time-box" :class="{ flipped }" @mouseenter="flipped = true" @mouseleave="flipped = false">
+  <div
+    class="time-box"
+    :class="{ flipped }"
+    @mouseenter="flipped = true"
+    @mouseleave="flipped = false"
+  >
     <div class="card-inner">
       <!-- 正面：时间日期 -->
       <div class="card-front">
@@ -9,14 +14,12 @@
       <!-- 背面：三体纪年（打字动画） -->
       <div class="card-back">
         <div class="back-content">
-          <div
-              class="greeting"
-              :class="{ 'typing-done': isTypingComplete }"
-          >{{ typedGreeting }}</div>
-          <div
-              class="message"
-              :class="{ 'typing-done': isTypingComplete }"
-          >{{ typedMessage }}</div>
+          <div class="greeting" :class="{ 'typing-done': isTypingComplete }">
+            {{ typedGreeting }}
+          </div>
+          <div class="message" :class="{ 'typing-done': isTypingComplete }">
+            {{ typedMessage }}
+          </div>
         </div>
       </div>
     </div>
@@ -41,7 +44,15 @@ const updateDateTime = () => {
   const year = now.getFullYear()
   const month = (now.getMonth() + 1).toString().padStart(2, '0')
   const day = now.getDate().toString().padStart(2, '0')
-  const weekdays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
+  const weekdays = [
+    '星期日',
+    '星期一',
+    '星期二',
+    '星期三',
+    '星期四',
+    '星期五',
+    '星期六',
+  ]
   const weekday = weekdays[now.getDay()]
   date.value = `${year}年${month}月${day}日 ${weekday}`
 }
@@ -79,13 +90,15 @@ const eraInfo = computed(() => {
 const props = defineProps({
   message: {
     type: String,
-    default: '给岁月以文明，而不是给文明以岁月'
+    default: '给岁月以文明，而不是给文明以岁月',
   },
-  isDark:{type:Boolean,default:false},
+  isDark: { type: Boolean, default: false },
 })
 
 // 目标文本
-const targetGreeting = computed(() => `${eraInfo.value.name} ${eraInfo.value.year} 年`)
+const targetGreeting = computed(
+  () => `${eraInfo.value.name} ${eraInfo.value.year} 年`
+)
 const targetMessage = computed(() => props.message)
 
 // 打字机显示的文本
@@ -151,7 +164,7 @@ onUnmounted(() => {
 </script>
 
 <style scoped lang="scss">
-@import "../../../assets/css/components/container.scss";
+@import '../../../assets/css/components/container.scss';
 .time-box {
   width: 100%;
   border-radius: 24px;
@@ -170,7 +183,9 @@ onUnmounted(() => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: v-bind('props.isDark ? "rgba(155, 155, 155, 0.3)":"rgba(0, 0, 0, 0.3)"');
+  background: v-bind(
+    'props.isDark ? "rgba(155, 155, 155, 0.3)":"rgba(0, 0, 0, 0.3)"'
+  );
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   color: white;
 }
@@ -197,7 +212,7 @@ onUnmounted(() => {
   font-weight: 600;
   line-height: 1.2;
   letter-spacing: 2px;
-  font-family: "Comic",cursive;
+  font-family: 'Comic', cursive;
 }
 
 .date {
@@ -222,7 +237,7 @@ onUnmounted(() => {
   width: fit-content;
   margin: 0 auto;
   font-size: 1.8rem;
-  font-family: "HuaWenKaiTi","Comic Sans MS", cursive;
+  font-family: 'HuaWenKaiTi', 'Comic Sans MS', cursive;
   animation: blink-caret 0.75s step-end infinite;
 }
 
@@ -244,8 +259,13 @@ onUnmounted(() => {
 }
 
 @keyframes blink-caret {
-  from, to { border-color: transparent; }
-  50% { border-color: rgba(255, 255, 255, 0.7); }
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: rgba(255, 255, 255, 0.7);
+  }
 }
 
 .time-box:hover .card-front,

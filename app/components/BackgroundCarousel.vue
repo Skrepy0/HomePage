@@ -1,19 +1,19 @@
 <template>
   <div class="background-carousel" v-if="images.length">
-    <!-- 当前背景层 -->
     <div
-        class="bg-slide"
-        :style="{
+      class="bg-slide"
+      :style="{
         backgroundImage: `url(${images[currentIndex]})`,
         opacity: isAnimating ? 0 : 1,
+        transition: `opacity ${transitionDuration}ms cubic-bezier(0.4, 0, 0.2, 1)`,
       }"
     ></div>
-    <!-- 下一张背景层（过渡时显示） -->
     <div
-        class="bg-slide"
-        :style="{
+      class="bg-slide"
+      :style="{
         backgroundImage: `url(${images[nextIndex]})`,
         opacity: isAnimating ? 1 : 0,
+        transition: `opacity ${transitionDuration}ms cubic-bezier(0.4, 0, 0.2, 1)`,
       }"
     ></div>
     <div class="overlay"></div>
@@ -27,10 +27,10 @@ const props = defineProps({
   images: { type: Array, required: true },
   interval: { type: Number, default: 15000 },
   transitionDuration: { type: Number, default: 2000 },
-  isDark: { type: Boolean, default: false }
+  isDark: { type: Boolean, default: false },
 })
-const imagesLoaded = ref(false)      // 是否已完成预加载
-const loadedCount = ref(0)           // 已加载图片数量
+const imagesLoaded = ref(false) // 是否已完成预加载
+const loadedCount = ref(0) // 已加载图片数量
 const totalImages = computed(() => props.images.length)
 
 // 预加载所有图片
@@ -42,7 +42,7 @@ const preloadImages = () => {
     }
     let count = 0
     const total = props.images.length
-    props.images.forEach(src => {
+    props.images.forEach((src) => {
       const img = new Image()
       img.onload = img.onerror = () => {
         count++
@@ -80,7 +80,10 @@ const startCarousel = () => {
     stopCarousel()
     timer = setInterval(() => {
       if (isAnimating.value) return
-      nextIndex.value = getRandomDifferentIndex(currentIndex.value, props.images.length)
+      nextIndex.value = getRandomDifferentIndex(
+        currentIndex.value,
+        props.images.length
+      )
       isAnimating.value = true
       transitionTimer = setTimeout(() => {
         currentIndex.value = nextIndex.value
@@ -105,7 +108,10 @@ const stopCarousel = () => {
 const manuallyGoToNext = () => {
   if (!process.client || props.images.length <= 1 || isAnimating.value) return
   stopCarousel() // 清除所有定时器，手动切换后重新计时
-  nextIndex.value = getRandomDifferentIndex(currentIndex.value, props.images.length)
+  nextIndex.value = getRandomDifferentIndex(
+    currentIndex.value,
+    props.images.length
+  )
   isAnimating.value = true
   transitionTimer = setTimeout(() => {
     currentIndex.value = nextIndex.value
@@ -116,31 +122,41 @@ const manuallyGoToNext = () => {
 
 // 暴露方法给父组件
 defineExpose({
-  next: manuallyGoToNext
+  next: manuallyGoToNext,
 })
 
 // 监听图片列表变化
-watch(() => props.images, (newImages) => {
-  if (newImages.length) {
-    if (process.client) {
-      currentIndex.value = Math.floor(Math.random() * newImages.length)
-      nextIndex.value = getRandomDifferentIndex(currentIndex.value, newImages.length)
-    } else {
-      currentIndex.value = 0
-      nextIndex.value = 1 % newImages.length
+watch(
+  () => props.images,
+  (newImages) => {
+    if (newImages.length) {
+      if (process.client) {
+        currentIndex.value = Math.floor(Math.random() * newImages.length)
+        nextIndex.value = getRandomDifferentIndex(
+          currentIndex.value,
+          newImages.length
+        )
+      } else {
+        currentIndex.value = 0
+        nextIndex.value = 1 % newImages.length
+      }
+      isAnimating.value = false
+      stopCarousel()
+      startCarousel()
     }
-    isAnimating.value = false
-    stopCarousel()
-    startCarousel()
-  }
-}, { immediate: true })
+  },
+  { immediate: true }
+)
 
 onMounted(async () => {
   if (props.images.length) {
     const randomIndex = Math.floor(Math.random() * props.images.length)
     if (randomIndex !== currentIndex.value) {
       currentIndex.value = randomIndex
-      nextIndex.value = getRandomDifferentIndex(currentIndex.value, props.images.length)
+      nextIndex.value = getRandomDifferentIndex(
+        currentIndex.value,
+        props.images.length
+      )
     }
     // 预加载所有图片（等待完成）
     await preloadImages()
@@ -174,7 +190,8 @@ onUnmounted(() => {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  transition: opacity v-bind(transitionDuration + 'ms') cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity v-bind(transitionDuration + 'ms')
+    cubic-bezier(0.4, 0, 0.2, 1);
   will-change: opacity;
   filter: blur(2px);
 }
@@ -184,7 +201,9 @@ onUnmounted(() => {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: v-bind('props.isDark ? "rgba(0,0,0,0.46)" : "rgba(200,200,200,0.15)"');
+  background-color: v-bind(
+    'props.isDark ? "rgba(0,0,0,0.46)" : "rgba(200,200,200,0.15)"'
+  );
   z-index: 2;
   pointer-events: none;
   transition: background-color 0.3s ease;

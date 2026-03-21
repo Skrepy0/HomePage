@@ -1,15 +1,16 @@
-.container-base{
+.container-base {
   @extend .container-clear;
 }
-.container-base:hover{
+.container-base:hover {
   transform: translateY(-6px);
+  transition: transform 1s;
 }
-.container-base:active{
+.container-base:active {
   transform: scale(0.97);
   transition: transform 0.1s;
 }
-.container-clear{
-  transition: background 1s ease;
+.container-clear {
+  transition: background 0.8s ease;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.2);

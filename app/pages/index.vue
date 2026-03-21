@@ -1,49 +1,57 @@
 <template>
   <div>
-    <BackgroundCarousel ref="carouselRef" :images="bgImages" :interval="15000" :transition-duration="2000"
-                        :isDark="isDark"/>
+    <BackgroundCarousel
+      ref="carouselRef"
+      :images="bgImages"
+      :interval="15000"
+      :transition-duration="2000"
+      :isDark="isDark"
+    />
     <div class="profile-calendar-stats-wrapper">
-      <FunctionLayouts :onSwitch="handleSwitch" :switchLightDark="switchLightDark" :isDark="isDark"></FunctionLayouts>
+      <FunctionLayouts
+        :onSwitch="handleSwitch"
+        :switchLightDark="switchLightDark"
+        :isDark="isDark"
+      ></FunctionLayouts>
       <div class="content">
         <div class="cards-row">
           <!-- 左侧组：ProfileCard + Calendar -->
           <div class="left-group">
             <ProfileCard
-                avatar-url="/image/avatar.png"
-                username="Skrepy"
-                profile-link="#"
-                modrinth-url="https://modrinth.com/user/Skrepy2233"
-                bilibili-url="https://space.bilibili.com/3546594102217461"
-                github-url="https://github.com/Skrepy0"
-                luogu-url="https://www.luogu.com.cn/user/1862372"
-                size="medium"
-                :isDark="isDark"
+              avatar-url="/image/avatar.png"
+              username="Skrepy"
+              profile-link="#"
+              modrinth-url="https://modrinth.com/user/Skrepy2233"
+              bilibili-url="https://space.bilibili.com/3546594102217461"
+              github-url="https://github.com/Skrepy0"
+              luogu-url="https://www.luogu.com.cn/user/1862372"
+              size="medium"
+              :isDark="isDark"
             />
             <ClientOnly>
-              <Calendar size="small" :isDark="isDark"/>
+              <Calendar size="small" :isDark="isDark" />
             </ClientOnly>
           </div>
 
           <!-- 右侧组：TimeBox + DateStats -->
           <div class="right-group">
-            <TimeBox :isDark="isDark"/>
-            <DateStats size="medium" startDate="2026-03-19" :isDark="isDark"/>
+            <TimeBox :isDark="isDark" />
+            <DateStats size="medium" startDate="2026-03-19" :isDark="isDark" />
           </div>
         </div>
       </div>
-
     </div>
   </div>
-  <Footer :isDark="isDark"/>
+  <Footer :isDark="isDark" />
 </template>
 
 <script setup>
 import BackgroundCarousel from '~/components/BackgroundCarousel.vue'
-import {backgroundImageUrls} from '~/utils/background/backgroundImages'
+import { backgroundImageUrls } from '~/utils/background/backgroundImages'
 import FunctionLayouts from '~/components/FunctionLayouts.vue'
-import {ref, onMounted} from 'vue'
-import TimeBox from "~/components/Date/TimeBox.vue";
-import Calendar from "~/components/Date/Calendar.vue";
+import { ref, onMounted } from 'vue'
+import TimeBox from '~/components/Date/TimeBox.vue'
+import Calendar from '~/components/Date/Calendar.vue'
 
 // 主题状态：true 表示暗色，false 表示亮色
 const isDark = ref(false)
@@ -64,7 +72,7 @@ onMounted(() => {
 
 const carouselRef = ref()
 const handleSwitch = () => {
-  carouselRef.value?.next();
+  carouselRef.value?.next()
 }
 const bgImages = backgroundImageUrls
 </script>
@@ -73,13 +81,13 @@ const bgImages = backgroundImageUrls
 .content {
   position: relative;
   z-index: 1;
-  min-height: 100vh;                /* 改为 min-height 允许内容撑开 */
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;      /* 改为顶部对齐，不再垂直居中 */
+  justify-content: flex-start;
   box-sizing: border-box;
-  padding: 15vh 20px 20px 20px;     /* 增加顶部内边距，整体下移 */
+  padding: 15vh 20px 20px 20px;
 }
 
 .cards-row {
@@ -87,49 +95,46 @@ const bgImages = backgroundImageUrls
   flex-direction: row;
   justify-content: center;
   align-items: flex-start;
-  gap: 2rem;
+  gap: 1.5rem; /* 减小桌面端间距 */
   max-width: 1200px;
   width: 100%;
+  margin-bottom: 2rem; /* 与页脚保持距离 */
 }
 
 .left-group {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  align-items: center; /* 内部卡片水平居中 */
+  align-items: center;
+  width: 100%;
+  max-width: 360px; /* 与右侧组宽度对齐 */
 }
 
 .right-group {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  width: 360px; /* 与 DateStats medium 宽度一致 */
+  width: 100%;
+  max-width: 360px;
 }
 
 .right-group > * {
-  width: 100%; /* 强制 TimeBox 和 DateStats 宽度填满 */
+  width: 100%;
 }
 
-/* 响应式调整 */
+/* 响应式 */
 @media (max-width: 768px) {
   .content {
-    padding-top: 20px;             /* 手机上适当加大顶部间距 */
+    padding-top: 60px; /* 增加顶部间距 */
   }
-
   .cards-row {
     flex-direction: column;
-    align-items: center;
     gap: 1.5rem;
   }
-
   .left-group,
   .right-group {
     width: 100%;
-    max-width: 360px;
-  }
-
-  .right-group {
-    max-width: 360px;
+    max-width: calc(100% - 20px); /* 手机左右留边距 */
   }
 }
 </style>

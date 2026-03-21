@@ -1,23 +1,24 @@
 <template>
   <div class="dynamic-cursor">
-    <index/>
+    <index />
   </div>
 </template>
 
 <script setup>
-import Index from "~/pages/index.vue";
+import Index from '~/pages/index.vue'
 useHead({
-  title: 'Skrepyの主页~'
+  title: 'Skrepyの主页~',
 })
 </script>
 
 <style scoped lang="scss">
-@import "../assets/css/fonts";
-@import "../assets/css/main.scss";
+@import '../assets/css/fonts';
+@import '../assets/css/main.scss';
 .dynamic-cursor {
   @extend .cursor-normal;
 }
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   width: 100%;

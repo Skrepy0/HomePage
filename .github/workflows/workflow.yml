@@ -4,7 +4,7 @@ name: Deploy to GitHub Pages
 on:
   # 每当推送到 main 分支时触发部署
   push:
-    branches: [ "main" ]
+    branches: ['main']
   # 允许手动触发该工作流程
   workflow_dispatch:
 
@@ -16,7 +16,7 @@ permissions:
 
 # 允许只有一个并发部署，跳过队列中正在进行的运行和最新的运行
 concurrency:
-  group: "pages"
+  group: 'pages'
   cancel-in-progress: true
 
 jobs:
@@ -30,11 +30,11 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: '20'
 
       - name: Install dependencies
         run: npm install
-      
+
       # 关键步骤：使用 github_pages 预设进行构建
       - name: Build
         run: npx nuxt build --preset github_pages

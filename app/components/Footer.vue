@@ -1,13 +1,26 @@
 <template>
-  <footer class="footer" :class="{ 'dark-mode': !isDark }">
+  <footer class="footer" :class="{ 'dark-mode': isDark }">
     <div class="footer-content">
       <div class="copyright">
-        © {{ currentYear }} Skrepy. <a class="license" href="https://mit-license.org/" target="_blank">MIT</a>.
-        <br>
+        © {{ currentYear }} Skrepy.
+        <a class="license" href="https://mit-license.org/" target="_blank"
+          >MIT</a
+        >.
+        <br />
         由Skrepy使用
-        <a target="_blank" style="color:#419972" href="https://github.com/vuejs/core">Vue.js</a>
+        <a
+          target="_blank"
+          style="color: #419972"
+          href="https://github.com/vuejs/core"
+          >Vue.js</a
+        >
         和
-        <a target="_blank" style="color:#00dc82" href="https://github.com/nuxt/nuxt">Nuxt</a>
+        <a
+          target="_blank"
+          style="color: #00dc82"
+          href="https://github.com/nuxt/nuxt"
+          >Nuxt</a
+        >
         编写
       </div>
     </div>
@@ -23,24 +36,25 @@ const currentYear = new Date().getFullYear()
 </script>
 
 <style scoped lang="scss">
-@import "../../assets/css/main.scss";
+@import '../../assets/css/main.scss';
 .footer {
-  border-radius:3px;
+  border-radius: 3px;
   left: 0;
   margin-top: 3rem;
   padding: 1.5rem 1rem;
-  background: rgba(100, 100, 100, 0.3);
+  background: rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-top: 1px solid rgba(100, 100, 100, 0.2);
   color: rgba(255, 255, 255, 0.8);
   text-align: center;
-  transition: background 0.3s ease;
+  transition: background 0.8s ease;
+  flex: 1px;
 }
 
 /* 暗色主题微调 */
 .footer.dark-mode {
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(155, 155, 155, 0.3);
 }
 
 .footer-content {
@@ -57,7 +71,7 @@ const currentYear = new Date().getFullYear()
 .copyright {
   font-size: 0.85rem;
   opacity: 0.8;
-  font-family: "Comic","Comic Sans MS",serif;
+  font-family: 'Comic', 'Comic Sans MS', serif;
   text-align: center;
 }
 
@@ -75,10 +89,10 @@ const currentYear = new Date().getFullYear()
     gap: 1rem;
   }
 }
-a{
+a {
   @extend .cursor-solid;
 }
-.license{
+.license {
   color: rgba(255, 255, 255, 0.8);
   @extend .cursor-solid;
 }

@@ -1,25 +1,25 @@
 @font-face {
-    font-family: 'Comic';
-    src: url('/fonts/comic/comicbd.ttf') format('truetype');
-    font-weight: bold;
-    font-style: normal;
-    font-display: swap;
+  font-family: 'Comic';
+  src: url('/fonts/comic/comicbd.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
 }
 @font-face {
-    font-family: 'Comic';
-    src: url('/fonts/comic/comic.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
+  font-family: 'Comic';
+  src: url('/fonts/comic/comic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 @font-face {
-    font-family: 'HuaWenKaiTi';
-    src: url('/fonts/STXINGKA.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
+  font-family: 'HuaWenKaiTi';
+  src: url('/fonts/STXINGKA.TTF') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
 body {
-    font-family: 'Comic', system-ui, sans-serif;
+  font-family: 'Comic', system-ui, sans-serif;
 }

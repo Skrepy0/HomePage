@@ -12,29 +12,29 @@
 
     <div class="dates-grid">
       <div
-          v-for="(date, index) in dates"
-          :key="index"
-          class="date-cell"
-          :class="{
-            'other-month': date.otherMonth,
-            'today': date.isToday
-          }"
+        v-for="(date, index) in dates"
+        :key="index"
+        class="date-cell"
+        :class="{
+          'other-month': date.otherMonth,
+          today: date.isToday,
+        }"
       >
         {{ date.day }}
       </div>
     </div>
-    <Quote/>
+    <Quote />
   </div>
 </template>
 
-<script setup lang = "ts">
+<script setup lang="ts">
 import { ref, computed } from 'vue'
 const props = defineProps({
   size: {
     type: String,
     default: 'small', // 'small' 或 'medium'
   },
-  isDark:{type:Boolean,default:false}
+  isDark: { type: Boolean, default: false },
 })
 const sizeClass = `calendar-${props.size}`
 
@@ -62,7 +62,7 @@ const dates = computed(() => {
     datesArray.unshift({
       day: prevMonthDays - i,
       otherMonth: true,
-      isToday: false
+      isToday: false,
     })
   }
   // 本月日期
@@ -71,9 +71,10 @@ const dates = computed(() => {
     datesArray.push({
       day: i,
       otherMonth: false,
-      isToday: year.value === today.getFullYear() &&
-          month.value === today.getMonth() &&
-          i === today.getDate()
+      isToday:
+        year.value === today.getFullYear() &&
+        month.value === today.getMonth() &&
+        i === today.getDate(),
     })
   }
   // 下月补全（使网格固定为42格，6行）
@@ -83,7 +84,7 @@ const dates = computed(() => {
     datesArray.push({
       day: i,
       otherMonth: true,
-      isToday: false
+      isToday: false,
     })
   }
   return datesArray
@@ -100,15 +101,17 @@ const nextMonth = () => {
 }
 </script>
 
-<style scoped lang = "scss">
-@import "../../../assets/css/main.scss";
-@import "../../../assets/css/components/container.scss";
-@import "../../../assets/css/components/calendar.scss";
-button{
+<style scoped lang="scss">
+@import '../../../assets/css/main.scss';
+@import '../../../assets/css/components/container.scss';
+@import '../../../assets/css/components/calendar.scss';
+button {
   @extend .cursor-solid;
 }
 .calendar-container {
-  background: v-bind('props.isDark ? "rgba(155, 155, 155, 0.3)" : "rgba(0, 0, 0, 0.3)"');
+  background: v-bind(
+    'props.isDark ? "rgba(155, 155, 155, 0.3)" : "rgba(0, 0, 0, 0.3)"'
+  );
   @extend .container-base;
   color: white;
   width: fit-content;
@@ -133,10 +136,12 @@ button{
     font-size: 0.8rem;
   }
 }
-.calendar-container {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
 .calendar-container:hover {
-  box-shadow: 0 20px 30px v-bind('props.isDark ? "rgba(255, 255, 255, 0.4)" : "rgba(0, 0, 0, 0.4)"');
+  box-shadow: 0 20px 30px
+    v-bind('props.isDark ? "rgba(255, 255, 255, 0.4)" : "rgba(0, 0, 0, 0.4)"');
+  transform: translateY(-3px);
+  transition:
+    box-shadow 0.5s,
+    transform 0.5s;
 }
 </style>

@@ -22,12 +22,12 @@ const sizeClass = `size-${props.size}`
 
 <template>
   <component
-      :is="link ? 'a' : 'div'"
-      :href="link"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="avatar-id-card"
-      :class="[sizeClass, { clickable: link }]"
+    :is="link ? 'a' : 'div'"
+    :href="link"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="avatar-id-card"
+    :class="[sizeClass, { clickable: link }]"
   >
     <img class="avatar" :src="avatarUrl" :alt="username" loading="lazy" />
     <span class="username">{{ username }}</span>
@@ -44,7 +44,9 @@ const sizeClass = `size-${props.size}`
   border-radius: 60px;
   border: 1px solid rgba(255, 255, 255, 0.25);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  transition: transform 0.2s, background 0.2s;
+  transition:
+    transform 0.2s,
+    background 0.2s;
   text-decoration: none;
   color: white;
 }

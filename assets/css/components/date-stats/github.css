@@ -1,163 +1,165 @@
 .stats-github {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 0.5rem;
-    width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  width: 100%;
 }
 
 .stats-github .stat-item {
-    background: rgba(100, 100, 100, 0.1);
-    padding: 0.2rem 0.8rem;
-    border-radius: 30px;
-    backdrop-filter: blur(4px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    gap: 0.3rem;
+  background: rgba(100, 100, 100, 0.1);
+  padding: 0.2rem 0.8rem;
+  border-radius: 30px;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  gap: 0.3rem;
 }
 
 .github-icon {
-    width: 24px;
-    height: 24px;
-    color: rgba(255, 255, 255, 0.9);
+  width: 24px;
+  height: 24px;
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .repository-path {
-    font-size: 0.8rem;
-    color: rgba(112, 255, 104, 0.6);
-    text-align: center;
-    padding: 0.2rem 0;
+  font-size: 0.8rem;
+  color: rgba(112, 255, 104, 0.6);
+  text-align: center;
+  padding: 0.2rem 0;
 }
 
 /* ========== 蛇形图区域（优化版 - 左移） ========== */
 .snake-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    flex: 1;
-    left: -8px;
-    min-height: 120px;
-    position: relative;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 16px;
-    padding: 0.75rem;
-    margin-top: 0.5rem;
-    transition: background 0.3s ease;
-    margin-left: -8px;           /* 向左移动 8px */
-    margin-right: 0;              /* 移除右侧边距 */
-    width: calc(100% + 8px);      /* 补偿宽度，避免溢出 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  left: -8px;
+  min-height: 120px;
+  position: relative;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  padding: 0.75rem;
+  margin-top: 0.5rem;
+  transition: background 0.3s ease;
+  margin-left: -8px; /* 向左移动 8px */
+  margin-right: 0; /* 移除右侧边距 */
+  width: calc(100% + 8px); /* 补偿宽度，避免溢出 */
 }
 
 /* 悬停时背景稍微加深 */
 .snake-container:hover {
-    background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.3);
 }
 
 .loading-placeholder,
 .error-placeholder {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    min-height: 100px;
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 0.85rem;
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 12px;
-    gap: 0.5rem;
-    backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 100px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  gap: 0.5rem;
+  backdrop-filter: blur(4px);
 }
-
+.error-placeholder:hover {
+  text-decoration: underline;
+}
 /* 加载动画：旋转圈 */
 .loading-placeholder::before {
-    content: '';
-    width: 24px;
-    height: 24px;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-top-color: rgba(255, 255, 255, 0.9);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
+  content: '';
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
 }
 
 @keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .snake-image {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
-    animation: fadeIn 0.4s ease-out;
-    border-radius: 8px;                       /* 图片圆角 */
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+  animation: fadeIn 0.4s ease-out;
+  border-radius: 8px; /* 图片圆角 */
 }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: scale(0.98);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .snake-caption {
-    font-size: 0.7rem;
-    color: rgba(255, 255, 255, 0.5);
-    text-align: center;
-    padding-top: 0.5rem;
-    letter-spacing: 0.5px;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-align: center;
+  padding-top: 0.5rem;
+  letter-spacing: 0.5px;
 }
 
 /* 移动端适配 */
 @media (max-width: 480px) {
-    .snake-container {
-        padding: 0.5rem;
-        min-height: 100px;
-        margin-top: 0.25rem;
-        left: -5px;
-    }
+  .snake-container {
+    padding: 0.5rem;
+    min-height: 100px;
+    margin-top: 0.25rem;
+    left: -5px;
+  }
 
-    .loading-placeholder,
-    .error-placeholder {
-        min-height: 80px;
-        font-size: 0.75rem;
-    }
+  .loading-placeholder,
+  .error-placeholder {
+    min-height: 80px;
+    font-size: 0.75rem;
+  }
 
-    .loading-placeholder::before {
-        width: 20px;
-        height: 20px;
-    }
+  .loading-placeholder::before {
+    width: 20px;
+    height: 20px;
+  }
 
-    .snake-caption {
-        font-size: 0.6rem;
-        padding-top: 0.3rem;
-    }
+  .snake-caption {
+    font-size: 0.6rem;
+    padding-top: 0.3rem;
+  }
 }
 /* GitHub 统计项 - 强制保持在一行 */
 .github-stats-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: nowrap !important;
-    overflow-x: auto;
-    justify-content: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap !important;
+  overflow-x: auto;
+  justify-content: flex-start;
 }
 
 .github-stats-item .stat-value,
 .github-stats-item .stat-label {
-    white-space: nowrap;
-    flex-shrink: 0;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .github-stats-item .repository-path {
-    white-space: nowrap;
-    flex-shrink: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    min-width: 0;
+  white-space: nowrap;
+  flex-shrink: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
 }
