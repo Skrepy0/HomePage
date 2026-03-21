@@ -312,7 +312,15 @@ const siteRunningDays = computed<number>(() => {
   const days = Math.floor(diffMs / (1000 * 60 * 60 * 24))
   return days >= 0 ? days : 0
 })
-
+// 根据语言统计是否加载成功，动态调整翻转后的偏移量
+const backTranslateY = computed(() => {
+  // 如果语言统计加载成功且有数据，偏移量大一些
+  if (languages.value.length > 0) {
+    return '180px'
+  }
+  // 如果语言统计正在加载或失败，偏移量小一些（避免多余空白）
+  return '90px'
+})
 // 生命周期
 onMounted(() => {
   fetchCommitCount()
@@ -489,7 +497,7 @@ a {
 .progress-bar {
   flex: 1;
   height: 8px;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(231, 180, 191, 0.2);
   border-radius: 4px;
   overflow: hidden;
   margin: 0 4px;
@@ -497,7 +505,7 @@ a {
 
 .progress-fill {
   height: 100%;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(231, 180, 191, 0.8);
   border-radius: 4px;
   transition: width 0.3s ease;
 }
@@ -567,7 +575,7 @@ a {
 
 /* 翻转后背面下移效果 */
 .card-inner.flipped .card-back {
-  transform: rotateX(180deg) translateY(180px);
+  transform: rotateX(180deg) translateY(v-bind(backTranslateY));
   transition: transform 0.6s;
 }
 

@@ -4,6 +4,9 @@
       <button class="month-nav" @click="prevMonth">‹</button>
       <span class="current-month">{{ year }}年{{ month + 1 }}月</span>
       <button class="month-nav" @click="nextMonth">›</button>
+      <button class="half-toggle" @click="toggleHalf">
+        {{ halfType === 'first' ? '上半月' : '下半月' }}
+      </button>
     </div>
 
     <div class="weekdays">
@@ -12,102 +15,109 @@
 
     <div class="dates-grid">
       <div
-        v-for="(date, index) in dates"
-        :key="index"
+        v-for="date in visibleDays"
+        :key="date.key"
         class="date-cell"
         :class="{
-          'other-month': date.otherMonth,
           today: date.isToday,
+          'other-month': date.otherMonth,
         }"
       >
         {{ date.day }}
       </div>
     </div>
+
     <Quote />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+
 const props = defineProps({
   size: {
     type: String,
-    default: 'small', // 'small' 或 'medium'
+    default: 'small',
   },
   isDark: { type: Boolean, default: false },
 })
+
 const sizeClass = `calendar-${props.size}`
 
 // 当前显示的日期（年、月）
 const currentDate = ref(new Date())
 const year = computed(() => currentDate.value.getFullYear())
-const month = computed(() => currentDate.value.getMonth()) // 0-11
+const month = computed(() => currentDate.value.getMonth())
 
 // 星期缩写
 const weekdays = ['一', '二', '三', '四', '五', '六', '日']
 
-// 生成日期网格数据
-const dates = computed(() => {
-  const firstDayOfMonth = new Date(year.value, month.value, 1)
-  const startDayOfWeek = firstDayOfMonth.getDay() // 0 周日, 1 周一 ...
-  // 将星期转换为以周一为一周第一天：周日为6，周一为0，以此类推
-  const startOffset = startDayOfWeek === 0 ? 6 : startDayOfWeek - 1
+// 显示上半月还是下半月
+const halfType = ref<'first' | 'second'>('first')
 
-  const daysInMonth = new Date(year.value, month.value + 1, 0).getDate()
-  const prevMonthDays = new Date(year.value, month.value, 0).getDate() // 上月总天数
-
-  const datesArray = []
-  // 上月剩余日期
-  for (let i = 0; i < startOffset; i++) {
-    datesArray.unshift({
-      day: prevMonthDays - i,
-      otherMonth: true,
-      isToday: false,
-    })
-  }
-  // 本月日期
+// 自动选择包含今天的半个月
+function updateHalfTypeByToday() {
   const today = new Date()
-  for (let i = 1; i <= daysInMonth; i++) {
-    datesArray.push({
-      day: i,
-      otherMonth: false,
+  if (year.value === today.getFullYear() && month.value === today.getMonth()) {
+    halfType.value = today.getDate() <= 15 ? 'first' : 'second'
+  } else {
+    // 非当前月份时，默认显示上半月
+    halfType.value = 'first'
+  }
+}
+
+// 切换上半月/下半月
+const toggleHalf = () => {
+  halfType.value = halfType.value === 'first' ? 'second' : 'first'
+}
+
+// 生成当前显示的日期列表（仅半个月）
+const visibleDays = computed(() => {
+  const daysInMonth = new Date(year.value, month.value + 1, 0).getDate()
+  const startDay = halfType.value === 'first' ? 1 : 16
+  const endDay = halfType.value === 'first' ? 15 : daysInMonth
+
+  const today = new Date()
+  const dates = []
+
+  for (let d = startDay; d <= endDay; d++) {
+    dates.push({
+      key: `${year.value}-${month.value}-${d}`,
+      day: d,
       isToday:
         year.value === today.getFullYear() &&
         month.value === today.getMonth() &&
-        i === today.getDate(),
+        d === today.getDate(),
+      otherMonth: false,
     })
   }
-  // 下月补全（使网格固定为42格，6行）
-  const totalCells = 42
-  const remaining = totalCells - datesArray.length
-  for (let i = 1; i <= remaining; i++) {
-    datesArray.push({
-      day: i,
-      otherMonth: true,
-      isToday: false,
-    })
-  }
-  return datesArray
+  return dates
 })
 
-// 切换到上个月
+// 切换月份
 const prevMonth = () => {
   currentDate.value = new Date(year.value, month.value - 1, 1)
+  updateHalfTypeByToday() // 切换后重新确定显示半区
 }
 
-// 切换到下个月
 const nextMonth = () => {
   currentDate.value = new Date(year.value, month.value + 1, 1)
+  updateHalfTypeByToday()
 }
+
+// 初始化时根据今日日期设置半区
+updateHalfTypeByToday()
 </script>
 
 <style scoped lang="scss">
 @import '../../../assets/css/main.scss';
 @import '../../../assets/css/components/container.scss';
 @import '../../../assets/css/components/calendar.scss';
+
 button {
   @extend .cursor-solid;
 }
+
 .calendar-container {
   background: v-bind(
     'props.isDark ? "rgba(155, 155, 155, 0.3)" : "rgba(0, 0, 0, 0.3)"'
@@ -117,14 +127,101 @@ button {
   width: fit-content;
   margin-top: 0;
 }
+.calendar-container:hover {
+  box-shadow: 0 20px 30px
+    v-bind('props.isDark ? "rgba(255, 255, 255, 0.4)" : "rgba(0, 0, 0, 0.4)"');
+  transform: translateY(-3px);
+  transition: 0.5s;
+}
 
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.month-nav {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+
+  transition: all 0.2s;
+}
+
+.month-nav:hover {
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(1.05);
+}
+
+.current-month {
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.half-toggle {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.7rem;
+
+  transition: all 0.2s;
+}
+
+.half-toggle:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  margin-bottom: 0.5rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
+}
+
+.dates-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 0.5rem;
+}
+
+.date-cell {
+  flex: 0 0 calc((100% - 6 * 4px) / 7); /* 每行7个，间距4px */
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+
+.date-cell.today {
+  background: rgba(255, 255, 255, 0.3);
+  font-weight: bold;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.date-cell:hover:not(.other-month) {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* 尺寸变体 */
 .calendar-small {
   width: 280px;
 }
 .calendar-medium {
   width: 360px;
 }
-
 @media (max-width: 480px) {
   .calendar-small {
     width: 240px;
@@ -133,15 +230,11 @@ button {
     width: 300px;
   }
   .date-cell {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
   }
-}
-.calendar-container:hover {
-  box-shadow: 0 20px 30px
-    v-bind('props.isDark ? "rgba(255, 255, 255, 0.4)" : "rgba(0, 0, 0, 0.4)"');
-  transform: translateY(-3px);
-  transition:
-    box-shadow 0.5s,
-    transform 0.5s;
+  .half-toggle {
+    font-size: 0.6rem;
+    padding: 0.1rem 0.4rem;
+  }
 }
 </style>

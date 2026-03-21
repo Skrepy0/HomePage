@@ -15,25 +15,12 @@
       ></FunctionLayouts>
       <div class="content">
         <div class="cards-row">
-          <!-- 左侧组：ProfileCard + Calendar -->
           <div class="left-group">
-            <ProfileCard
-              avatar-url="/image/avatar.png"
-              username="Skrepy"
-              profile-link="#"
-              modrinth-url="https://modrinth.com/user/Skrepy2233"
-              bilibili-url="https://space.bilibili.com/3546594102217461"
-              github-url="https://github.com/Skrepy0"
-              luogu-url="https://www.luogu.com.cn/user/1862372"
-              size="medium"
-              :isDark="isDark"
-            />
+            <ProfileCard :isDark="isDark" />
             <ClientOnly>
               <Calendar size="small" :isDark="isDark" />
             </ClientOnly>
           </div>
-
-          <!-- 右侧组：TimeBox + DateStats -->
           <div class="right-group">
             <TimeBox :isDark="isDark" />
             <DateStats size="medium" startDate="2026-03-19" :isDark="isDark" />

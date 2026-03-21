@@ -6,13 +6,14 @@
 
 <script setup>
 import Index from '~/pages/index.vue'
+import { config } from '~/config.ts'
 useHead({
-  title: 'Skrepyの主页~',
+  title: config['title'],
 })
 </script>
 
 <style scoped lang="scss">
-@import '../assets/css/fonts';
+@import '../assets/css/fonts.scss';
 @import '../assets/css/main.scss';
 .dynamic-cursor {
   @extend .cursor-normal;
@@ -23,5 +24,11 @@ body {
   padding: 0;
   width: 100%;
   height: 100%;
+}
+
+::selection {
+  background-color: #728e9c;
+  color: #fff;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
 }
 </style>

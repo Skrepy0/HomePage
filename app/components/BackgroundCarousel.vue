@@ -1,27 +1,44 @@
 <template>
   <div class="background-carousel" v-if="images.length">
-    <div
-      class="bg-slide"
-      :style="{
-        backgroundImage: `url(${images[currentIndex]})`,
-        opacity: isAnimating ? 0 : 1,
-        transition: `opacity ${transitionDuration}ms cubic-bezier(0.4, 0, 0.2, 1)`,
-      }"
-    ></div>
-    <div
-      class="bg-slide"
-      :style="{
-        backgroundImage: `url(${images[nextIndex]})`,
-        opacity: isAnimating ? 1 : 0,
-        transition: `opacity ${transitionDuration}ms cubic-bezier(0.4, 0, 0.2, 1)`,
-      }"
-    ></div>
+    <!-- 预加载进度条（仅当未加载完成时显示） -->
+    <div v-if="!imagesLoaded" class="preload-overlay">
+      <div class="preload-card">
+        <div class="preload-text">加载背景中...</div>
+        <div class="progress-bar-container">
+          <div
+            class="progress-fill"
+            :style="{ width: (loadedCount / totalImages) * 100 + '%' }"
+          ></div>
+        </div>
+        <div class="preload-stats">{{ loadedCount }} / {{ totalImages }}</div>
+      </div>
+    </div>
+
+    <!-- 轮播背景层（预加载完成后才显示，避免闪烁） -->
+    <template v-if="imagesLoaded">
+      <div
+        class="bg-slide"
+        :style="{
+          backgroundImage: `url(${images[currentIndex]})`,
+          opacity: isAnimating ? 0 : 1,
+          transition: `opacity ${transitionDuration}ms cubic-bezier(0.4, 0, 0.2, 1)`,
+        }"
+      ></div>
+      <div
+        class="bg-slide"
+        :style="{
+          backgroundImage: `url(${images[nextIndex]})`,
+          opacity: isAnimating ? 1 : 0,
+          transition: `opacity ${transitionDuration}ms cubic-bezier(0.4, 0, 0.2, 1)`,
+        }"
+      ></div>
+    </template>
     <div class="overlay"></div>
   </div>
 </template>
 
 <script setup lang="js">
-import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 
 const props = defineProps({
   images: { type: Array, required: true },
@@ -29,6 +46,7 @@ const props = defineProps({
   transitionDuration: { type: Number, default: 2000 },
   isDark: { type: Boolean, default: false },
 })
+
 const imagesLoaded = ref(false) // 是否已完成预加载
 const loadedCount = ref(0) // 已加载图片数量
 const totalImages = computed(() => props.images.length)
@@ -56,15 +74,14 @@ const preloadImages = () => {
     })
   })
 }
-// 索引初始值在服务端设为0，客户端挂载后再随机化（避免SSR闪烁）
+
+// 轮播相关逻辑（与之前相同，略）
 const currentIndex = ref(0)
 const nextIndex = ref(1)
 const isAnimating = ref(false)
-
 let timer = null
 let transitionTimer = null
 
-// 生成与当前索引不同的随机索引
 const getRandomDifferentIndex = (current, total) => {
   if (total <= 1) return 0
   let next
@@ -74,7 +91,6 @@ const getRandomDifferentIndex = (current, total) => {
   return next
 }
 
-// 启动自动轮播（仅在客户端执行）
 const startCarousel = () => {
   if (process.client && props.images.length > 1) {
     stopCarousel()
@@ -104,10 +120,9 @@ const stopCarousel = () => {
   }
 }
 
-// 手动切换到下一张（对外暴露）
 const manuallyGoToNext = () => {
   if (!process.client || props.images.length <= 1 || isAnimating.value) return
-  stopCarousel() // 清除所有定时器，手动切换后重新计时
+  stopCarousel()
   nextIndex.value = getRandomDifferentIndex(
     currentIndex.value,
     props.images.length
@@ -116,16 +131,12 @@ const manuallyGoToNext = () => {
   transitionTimer = setTimeout(() => {
     currentIndex.value = nextIndex.value
     isAnimating.value = false
-    startCarousel() // 重新启动自动轮播
+    startCarousel()
   }, props.transitionDuration)
 }
 
-// 暴露方法给父组件
-defineExpose({
-  next: manuallyGoToNext,
-})
+defineExpose({ next: manuallyGoToNext })
 
-// 监听图片列表变化
 watch(
   () => props.images,
   (newImages) => {
@@ -158,10 +169,8 @@ onMounted(async () => {
         props.images.length
       )
     }
-    // 预加载所有图片（等待完成）
-    await preloadImages()
-    // 预加载完成后启动轮播（只调用一次）
-    startCarousel()
+    await preloadImages() // 等待预加载完成
+    startCarousel() // 预加载完成后启动轮播
   }
 })
 
@@ -181,6 +190,60 @@ onUnmounted(() => {
   overflow: hidden;
 }
 
+/* 预加载遮罩层 */
+.preload-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(231, 180, 191, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.preload-card {
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(12px);
+  border-radius: 24px;
+  padding: 1.5rem 2rem;
+  text-align: center;
+  color: white;
+  border: 1px solid rgba(231, 180, 191, 0.2);
+  min-width: 200px;
+}
+
+.preload-text {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  letter-spacing: 1px;
+}
+
+.progress-bar-container {
+  width: 100%;
+  height: 6px;
+  background: rgba(231, 180, 191, 0.2);
+  border-radius: 3px;
+  overflow: hidden;
+  margin: 0.5rem 0;
+}
+
+.progress-fill {
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.preload-stats {
+  font-size: 0.8rem;
+  opacity: 0.8;
+  margin-top: 0.5rem;
+}
+
 .bg-slide {
   position: absolute;
   top: 0;
@@ -195,6 +258,7 @@ onUnmounted(() => {
   will-change: opacity;
   filter: blur(2px);
 }
+
 .overlay {
   position: absolute;
   top: 0;

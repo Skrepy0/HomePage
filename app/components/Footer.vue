@@ -21,7 +21,8 @@
           href="https://github.com/nuxt/nuxt"
           >Nuxt</a
         >
-        编写
+        编写✏️
+        <br />
       </div>
     </div>
   </footer>
@@ -69,7 +70,7 @@ const currentYear = new Date().getFullYear()
 }
 
 .copyright {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   opacity: 0.8;
   font-family: 'Comic', 'Comic Sans MS', serif;
   text-align: center;

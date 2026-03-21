@@ -52,8 +52,9 @@ const sizeClass = `size-${props.size}`
 }
 
 .avatar-id-card.clickable:hover {
-  transform: scale(1.02);
+  transform: scale(1.1);
   background: rgba(255, 255, 255, 0.25);
+  transition: 1s;
 }
 
 .avatar {
