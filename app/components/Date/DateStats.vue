@@ -2,7 +2,7 @@
   <div class="stats-container" @mouseenter="flipped = true" @mouseleave="flipped = false">
     <div class="card-inner" :class="{ flipped }">
       <!-- 正面：统计信息 -->
-      <div class="card-back">
+      <div class="card-front">
         <div class="stat-item">
           <div class="stat-label">今日已过</div>
           <div class="progress-bar">
@@ -39,7 +39,7 @@
       </div>
 
       <!-- 背面：语言统计 + 贪吃蛇动画 -->
-      <div class="card-front">
+      <div class="card-back">
         <!-- 上半部分：GitHub 统计区域 - 保持在一行 -->
         <div class="stats-github">
           <div class="stat-item github-stats-item">
@@ -239,9 +239,13 @@ onUnmounted(() => {
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 @import "../../../assets/css/components/date-stats/github.css";
-
+@import "../../../assets/css/components/container.scss";
+@import "../../../assets/css/main.scss";
+a{
+  @extend .cursor-solid;
+}
 .stats-container {
   perspective: 1000px;
   width: fit-content;
@@ -262,15 +266,11 @@ onUnmounted(() => {
 
 .card-front,
 .card-back {
+  @extend .container-clear;
   width: 100%;
   backface-visibility: hidden;
-  border-radius: 24px;
-  padding: 1.2rem;
   box-sizing: border-box;
   background: v-bind('props.isDark ? "rgba(155, 155, 155, 0.3)" : "rgba(0, 0, 0, 0.3)"');
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
   color: white;
   display: flex;
   flex-direction: column;
@@ -283,30 +283,6 @@ onUnmounted(() => {
   left: 0;
   transform: rotateX(180deg);
   min-height: 200px;
-}
-
-/* GitHub 统计项 - 强制保持在一行 */
-.github-stats-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: nowrap !important;
-  overflow-x: auto;
-  justify-content: flex-start;
-}
-
-.github-stats-item .stat-value,
-.github-stats-item .stat-label {
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-.github-stats-item .repository-path {
-  white-space: nowrap;
-  flex-shrink: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  min-width: 0;
 }
 
 /* 语言统计区域 */
@@ -482,7 +458,7 @@ onUnmounted(() => {
 
 /* 翻转后背面下移效果 */
 .card-inner.flipped .card-back {
-  transform: rotateX(180deg) translateY(-190px);
+  transform: rotateX(180deg) translateY(180px);
   transition: transform 0.6s;
 }
 </style>

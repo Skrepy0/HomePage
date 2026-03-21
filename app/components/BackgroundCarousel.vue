@@ -29,7 +29,33 @@ const props = defineProps({
   transitionDuration: { type: Number, default: 2000 },
   isDark: { type: Boolean, default: false }
 })
+const imagesLoaded = ref(false)      // 是否已完成预加载
+const loadedCount = ref(0)           // 已加载图片数量
+const totalImages = computed(() => props.images.length)
 
+// 预加载所有图片
+const preloadImages = () => {
+  return new Promise((resolve) => {
+    if (!props.images.length) {
+      resolve()
+      return
+    }
+    let count = 0
+    const total = props.images.length
+    props.images.forEach(src => {
+      const img = new Image()
+      img.onload = img.onerror = () => {
+        count++
+        loadedCount.value = count
+        if (count === total) {
+          imagesLoaded.value = true
+          resolve()
+        }
+      }
+      img.src = src
+    })
+  })
+}
 // 索引初始值在服务端设为0，客户端挂载后再随机化（避免SSR闪烁）
 const currentIndex = ref(0)
 const nextIndex = ref(1)
@@ -109,13 +135,16 @@ watch(() => props.images, (newImages) => {
   }
 }, { immediate: true })
 
-onMounted(() => {
+onMounted(async () => {
   if (props.images.length) {
     const randomIndex = Math.floor(Math.random() * props.images.length)
     if (randomIndex !== currentIndex.value) {
       currentIndex.value = randomIndex
       nextIndex.value = getRandomDifferentIndex(currentIndex.value, props.images.length)
     }
+    // 预加载所有图片（等待完成）
+    await preloadImages()
+    // 预加载完成后启动轮播（只调用一次）
     startCarousel()
   }
 })
@@ -145,7 +174,6 @@ onUnmounted(() => {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  /* 使用更自然的缓动曲线 */
   transition: opacity v-bind(transitionDuration + 'ms') cubic-bezier(0.4, 0, 0.2, 1);
   will-change: opacity;
   filter: blur(2px);

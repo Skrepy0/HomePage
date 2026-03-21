@@ -34,7 +34,7 @@ const sizeClass = `size-${props.size}`
   </component>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .avatar-id-card {
   display: inline-flex;
   align-items: center;
@@ -61,6 +61,7 @@ const sizeClass = `size-${props.size}`
 }
 
 .username {
+  @extend .cursor-solid;
   font-weight: 600;
   line-height: 1.2;
   white-space: nowrap;

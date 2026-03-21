@@ -34,6 +34,7 @@
 
     </div>
   </div>
+  <Footer :isDark="isDark"/>
 </template>
 
 <script setup>

@@ -94,18 +94,20 @@ const sizeClass = `size-${props.size}`
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+@import "../../assets/css/components/container.scss";
+@import "../../assets/css/main.scss";
+a{
+  @extend .cursor-normal;
+}
 .profile-card {
+  @extend .container-base;
   display: inline-flex;
   align-items: center;
   gap: 1rem;
   background: v-bind('props.isDark ? "rgba(155, 155, 155, 0.3)":"rgba(0, 0, 0, 0.3)"');
-  backdrop-filter: blur(12px);
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   color: white;
-  transition: background 0.5s;
 }
 svg{
   cursor: url("../../public/image/cursor.cur"), auto;
@@ -218,6 +220,7 @@ svg{
 }
 
 .icon {
+  @extend .cursor-solid;
   width: 24px;
   height: 24px;
 }
@@ -351,11 +354,6 @@ svg{
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .profile-card:hover {
-  transform: translateY(-6px);
   box-shadow: 0 20px 30px v-bind('props.isDark ? "rgba(255, 255, 255, 0.4)":"rgba(0, 0, 0, 0.4)"');
-}
-.profile-card:active {
-  transform: scale(0.97);
-  transition: transform 0.1s;
 }
 </style>

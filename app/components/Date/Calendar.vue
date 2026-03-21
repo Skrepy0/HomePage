@@ -100,24 +100,21 @@ const nextMonth = () => {
 }
 </script>
 
-<style scoped>
+<style scoped lang = "scss">
+@import "../../../assets/css/main.scss";
+@import "../../../assets/css/components/container.scss";
+@import "../../../assets/css/components/calendar.scss";
 button{
-  cursor: url("../../../public/image/cursor.cur"), auto;
+  @extend .cursor-solid;
 }
 .calendar-container {
   background: v-bind('props.isDark ? "rgba(155, 155, 155, 0.3)" : "rgba(0, 0, 0, 0.3)"');
-  transition: background 1s ease;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 24px;
-  padding: 1rem;
+  @extend .container-base;
   color: white;
   width: fit-content;
-  margin-top: 0; /* 与上方组件的间距 */
+  margin-top: 0;
 }
 
-/* 尺寸变体 */
 .calendar-small {
   width: 280px;
 }
@@ -125,77 +122,6 @@ button{
   width: 360px;
 }
 
-.calendar-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-}
-
-.month-nav {
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: white;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  font-size: 1.2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-}
-
-.month-nav:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: scale(1.1);
-}
-
-.current-month {
-  font-weight: 500;
-  font-size: 1.1rem;
-}
-
-.weekdays {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  text-align: center;
-  margin-bottom: 0.5rem;
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 0.9rem;
-}
-
-.dates-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 4px;
-}
-
-.date-cell {
-  aspect-ratio: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.9rem;
-  border-radius: 50%;
-  transition: background 0.2s;
-}
-
-.date-cell.other-month {
-  color: v-bind('props.isDark ? "rgba(0, 0, 0, 0.3)" : "rgba(255, 255, 255, 0.4)"');
-}
-
-.date-cell.today {
-  background: rgba(255, 255, 255, 0.3);
-  font-weight: bold;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-}
-
-.date-cell:hover:not(.other-month) {
-  background: rgba(255, 255, 255, 0.15);
-}
-
-/* 响应式 */
 @media (max-width: 480px) {
   .calendar-small {
     width: 240px;
@@ -211,11 +137,6 @@ button{
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .calendar-container:hover {
-  transform: translateY(-6px);
   box-shadow: 0 20px 30px v-bind('props.isDark ? "rgba(255, 255, 255, 0.4)" : "rgba(0, 0, 0, 0.4)"');
-}
-.calendar-container:active {
-  transform: scale(0.97);
-  transition: transform 0.1s;
 }
 </style>

@@ -38,14 +38,12 @@ onUnmounted(() => {
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "../../assets/css/components/container.scss";
+@import "../../assets/css/main.scss";
 .words-container {
+  @extend .container-base;
   background: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 24px;
-  padding: 1rem 1.2rem;
   max-width: 380px;
   margin: 0 auto;
   display: flex;
@@ -53,9 +51,6 @@ onUnmounted(() => {
   justify-content: space-between;
   gap: 0.8rem;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-button{
-  cursor: url("../../public/image/cursor.cur"), auto;
 }
 .words-container:hover {
   transform: translateY(-4px);
@@ -88,6 +83,7 @@ button{
 }
 
 .refresh-quote-btn {
+  @extend .cursor-solid;
   background: rgba(255, 255, 255, 0.15);
   border: none;
   border-radius: 50%;
@@ -132,6 +128,7 @@ button{
     font-size: 0.7rem;
   }
   .refresh-quote-btn {
+    @extend .cursor-solid;
     width: 28px;
     height: 28px;
   }

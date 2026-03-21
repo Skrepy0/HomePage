@@ -31,7 +31,8 @@ const moon = "M12.058 20q-3.333 0-5.667-2.334T4.058 12q0-2.47 1.413-4.535q1.414-
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+@import "../../assets/css/main.scss";
 .function-buttons {
   position: fixed;
   top: 20px;
@@ -42,6 +43,7 @@ const moon = "M12.058 20q-3.333 0-5.667-2.334T4.058 12q0-2.47 1.413-4.535q1.414-
 }
 
 button {
+  @extend .cursor-solid;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -54,9 +56,6 @@ button {
   border: 1px solid v-bind('props.isDark ? "rgba(255, 255, 255, 0.3)":"rgba(0, 0, 0, 0.3)"'); /* 浅灰色边框 */
   color: white;  /* 图标保持白色，与灰色背景对比清晰 */
   transition: all 0.5s ease;
-}
-button{
-  cursor: url("../../public/image/cursor.cur"), auto;
 }
 button:hover {
   background: v-bind('props.isDark ? "rgba(255, 255, 255, 0.5)":"rgba(0, 0, 0, 0.3)"'); /* 悬停时稍亮 */

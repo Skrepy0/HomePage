@@ -150,12 +150,29 @@ onUnmounted(() => {
 })
 </script>
 
-<style scoped>
-/* 样式保持不变，同上一版本 */
+<style scoped lang="scss">
+@import "../../../assets/css/components/container.scss";
 .time-box {
   width: 100%;
   border-radius: 24px;
   perspective: 1000px;
+}
+
+.card-front,
+.card-back {
+  @extend .container-clear;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: v-bind('props.isDark ? "rgba(155, 155, 155, 0.3)":"rgba(0, 0, 0, 0.3)"');
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  color: white;
 }
 
 .card-inner {
@@ -169,27 +186,6 @@ onUnmounted(() => {
 
 .time-box.flipped .card-inner {
   transform: rotateY(180deg);
-}
-
-.card-front,
-.card-back {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  border-radius: 24px;
-  padding: 1rem 0;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background: v-bind('props.isDark ? "rgba(155, 155, 155, 0.3)":"rgba(0, 0, 0, 0.3)"');
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  color: white;
 }
 
 .card-back {
