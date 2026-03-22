@@ -36,7 +36,11 @@ import {
   weatherTextToIcon,
   Zhixiashi,
 } from '~/utils/weather/weather'
-import { getCityNameByPinyin } from '~/utils/weather/cityPinyinMap'
+import {
+  convertToPinyin,
+  getCityNameByPinyin,
+} from '~/utils/weather/cityPinyinMap'
+import { pinyin } from 'pinyin-pro'
 
 const props = defineProps<{
   isDark?: boolean
@@ -53,7 +57,7 @@ const error = ref('')
 // 去除地区后缀（直辖市不处理）
 const removeSuffix = (name: string): string => {
   if (!name) return ''
-  return name.replace(/(市|县|区|省)$/, '')
+  return name.replace(/([市县区省])$/, '')
 }
 
 const displayLocation = computed(() => {
@@ -72,16 +76,18 @@ const fetchWeather = async () => {
   loading.value = true
   error.value = ''
   let cityPinyin = ''
+  let cityChinese = ''
 
   try {
     // 1. 获取 IP 定位（同步等待结果）
-    const ipRes = await fetch('http://ip-api.com/json/')
+    const ipRes = await fetch('https://api.mir6.com/api/ip?type=json')
     if (!ipRes.ok) throw new Error('IP 定位请求失败')
     const ipData = await ipRes.json()
-    if (ipData.status !== 'success') throw new Error('IP 定位数据无效')
+    if (ipData.msg !== 'success') throw new Error('IP 定位数据无效')
 
     // ip-api.com 返回的 city 字段已经是拼音（如 'Shangqiu'）
-    cityPinyin = ipData.city.toLowerCase()
+    cityChinese = ipData.data.city
+    cityPinyin = convertToPinyin(removeSuffix(cityChinese)).toLowerCase()
     console.log('定位城市拼音:', cityPinyin)
 
     // 2. 请求天气 API
@@ -97,7 +103,7 @@ const fetchWeather = async () => {
       const now = weatherData.results[0].now
       temperature.value = Math.round(Number(now.temperature)).toString()
       description.value = now.text
-      location.value = await getCityNameByPinyin(ipData.city) // 存储拼音，显示时转换为中文
+      location.value = cityChinese
       weatherIcon.value = weatherTextToIcon[now.text] || 'wi:na'
     } else {
       throw new Error('天气数据格式错误')

@@ -1,5 +1,7 @@
 // utils/cityPinyinMap.ts
 
+import { pinyin } from 'pinyin-pro'
+
 /**
  * 城市信息类型（根据 CSV 结构定义）
  */
@@ -136,4 +138,17 @@ export function getCityNameSync(pinyin?: string): string | undefined {
 // 可选：预加载数据（可在应用启动时调用，例如在 app.vue 的 onMounted 中）
 export async function preloadCityData() {
   await loadCityData()
+}
+export function convertToPinyin(text: string): string {
+  if (!text) return ''
+
+  try {
+    return pinyin(text, {
+      toneType: 'none', // 不输出声调
+      separator: '', // 拼音之间不加空格
+    })
+  } catch (error) {
+    console.error('拼音转换失败:', error)
+    return text // 出错时返回原文本
+  }
 }
