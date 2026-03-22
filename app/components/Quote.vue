@@ -21,11 +21,13 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import { Quote } from '~/utils/init/initQuote.ts'
 const quotes = Quote
-
+const props = defineProps<{
+  isDark?: boolean
+}>()
 const currentQuote = ref(quotes[0])
 let timer = null
 
@@ -48,30 +50,21 @@ onUnmounted(() => {
 @import '../../assets/css/main.scss';
 .words-container {
   @extend .container-base;
-  background: rgba(0, 0, 0, 0.3);
-  max-width: 380px;
-  margin: 0 auto;
+  width: 100%;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 0.8rem;
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
-}
-.words-container:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
-}
-
-.words-wrapper {
-  flex: 1;
-  text-align: center;
+  background: v-bind(
+    'props.isDark ? "rgba(155, 155, 155, 0.3)":"rgba(0, 0, 0, 0.3)"'
+  );
+  gap: 12px;
+  box-sizing: border-box;
+  padding: 0.8rem 1.2rem;
 }
 
 .words {
-  font-size: 1.1rem;
-  line-height: 1.6;
+  font-size: 1.2rem;
+  line-height: 1.5;
   color: #f5f5f5;
   font-weight: 500;
   margin-bottom: 0.5rem;
@@ -79,6 +72,17 @@ onUnmounted(() => {
     'HuaWenKaiTi', 'Comic', 'Noto Serif SC', 'Times New Roman', '宋体', serif;
   letter-spacing: 0.02em;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+.words-container:hover {
+  box-shadow: 0 20px 30px
+    v-bind('props.isDark ? "rgba(255, 255, 255, 0.4)" : "rgba(0, 0, 0, 0.4)"');
+  transform: translateY(-3px);
+  transition: 0.5s;
+}
+
+.words-wrapper {
+  flex: 1;
+  text-align: center;
 }
 
 .quote-author {
@@ -125,8 +129,8 @@ onUnmounted(() => {
 /* 响应式 */
 @media (max-width: 480px) {
   .words-container {
+    width: 110%;
     padding: 0.8rem 1rem;
-    max-width: 280px;
   }
   .words {
     font-size: 0.85rem;
@@ -143,6 +147,11 @@ onUnmounted(() => {
   .refresh-icon {
     width: 16px;
     height: 16px;
+  }
+}
+@media (max-width: 768px) {
+  .words-container {
+    width: 110%;
   }
 }
 </style>

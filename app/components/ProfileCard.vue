@@ -10,7 +10,8 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   profileLink: '',
 })
-
+const hoverGithub = ref(false)
+defineExpose({ hoverGithub })
 const sizeClass = `size-${config.profile_card_size}`
 const showBack = ref(false)
 
@@ -18,6 +19,44 @@ const showBack = ref(false)
 const toggleCard = () => {
   showBack.value = !showBack.value
 }
+const fullText = config.description || ''
+const displayText = ref('')
+let typingActive = true
+
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+const setHover = (val: boolean) => {
+  hoverGithub.value = val
+}
+const startTypingLoop = async () => {
+  if (!fullText) return
+  while (typingActive) {
+    // 逐字打出
+    for (let i = 0; i <= fullText.length; i++) {
+      if (!typingActive) break
+      displayText.value = fullText.substring(0, i)
+      await sleep(config.type.type_speed) // 打字速度 (ms)
+    }
+    if (!typingActive) break
+    await sleep(config.type.type_pause) // 打完停顿
+
+    // 逐字删除
+    for (let i = fullText.length; i >= 0; i--) {
+      if (!typingActive) break
+      displayText.value = fullText.substring(0, i)
+      await sleep(config.type.del_speed) // 删除速度
+    }
+    if (!typingActive) break
+    await sleep(config.type.del_pause) // 删完停顿
+  }
+}
+
+onMounted(() => {
+  startTypingLoop()
+})
+
+onUnmounted(() => {
+  typingActive = false
+})
 </script>
 
 <template>
@@ -90,6 +129,8 @@ const toggleCard = () => {
             rel="noopener noreferrer"
             class="social-link"
             :data-tooltip="links.github.title"
+            @mouseenter="setHover(true)"
+            @mouseleave="setHover(false)"
           >
             <svg class="icon" viewBox="0 0 24 24" width="24" height="24">
               <path
@@ -118,6 +159,11 @@ const toggleCard = () => {
               />
             </svg>
           </a>
+        </div>
+        <div v-if="fullText" class="description-wrapper">
+          <div class="description">
+            {{ displayText }}<span class="cursor"> </span>
+          </div>
         </div>
       </div>
 
@@ -202,7 +248,7 @@ const toggleCard = () => {
               </svg>
             </a>
           </div>
-          <p class="motto">「{{ config['description'] }}」</p>
+          <p class="motto">「{{ config.description }}」</p>
         </div>
       </div>
     </Transition>
@@ -214,25 +260,24 @@ const toggleCard = () => {
 @import '../../assets/css/main.scss';
 
 .profile-card {
-  @extend .container-base;
   display: inline-flex;
   flex-direction: column;
-  gap: 0.8rem;
-  background: v-bind(
-    'props.isDark ? "rgba(155, 155, 155, 0.3)":"rgba(0, 0, 0, 0.3)"'
-  );
+  width: 300px; /* 桌面端固定宽度（与右侧卡片组对齐） */
+  max-width: 300px;
+  height: 120px; /* 固定高度，根据实际内容调整 */
   color: white;
 }
 .profile-card:hover {
-  box-shadow: 0 20px 30px
-    v-bind('props.isDark ? "rgba(255, 255, 255, 0.4)" : "rgba(0, 0, 0, 0.4)"');
   transform: translateY(-3px);
   transition: 0.5s;
 }
 .card-content {
   display: flex;
-  flex-direction: row;
-  gap: 0.8rem;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem;
+  height: 100%; /* 填满卡片高度 */
+  padding: 0.5rem 0; /* 可选，避免内容贴边 */
 }
 
 /* 切换动画：缩放 + 淡入淡出 */
@@ -261,7 +306,8 @@ const toggleCard = () => {
   position: relative;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
+  max-width: 118px;
   text-decoration: none;
   color: white;
   transition: transform 0.5s;
@@ -326,7 +372,7 @@ const toggleCard = () => {
 .social-link::after {
   content: attr(data-tooltip);
   position: absolute;
-  bottom: 150%;
+  bottom: 120%;
   left: 50%;
   transform: translateX(-50%);
   background: rgba(255, 255, 255, 0.5);
@@ -347,7 +393,7 @@ const toggleCard = () => {
 .social-link::before {
   content: '';
   position: absolute;
-  bottom: 100%;
+  bottom: 80%;
   left: 50%;
   transform: translateX(-50%);
   border-width: 5px;
@@ -380,7 +426,7 @@ const toggleCard = () => {
 /* 背面内容样式 */
 .back-content {
   text-align: center;
-  padding: 0.5rem 0;
+  padding: 0.3rem 0;
 }
 .bio {
   font-size: 0.9rem;
@@ -437,7 +483,54 @@ const toggleCard = () => {
   width: 28px;
   height: 28px;
 }
+.card-content {
+  display: flex;
+  flex-wrap: wrap; /* 允许换行，使描述单独一行 */
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.description-wrapper {
+  width: 100%;
+  margin-top: 0.1rem;
+}
+.description {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  line-height: 1.2;
+  font-family: 'Comic', sans-serif;
+  word-break: break-word;
+}
+/* 光标样式 */
+.cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.5em;
+  background-color: rgba(255, 255, 255, 0.5);
+  margin-left: 2px;
+  animation: blink 1s step-end infinite;
+  vertical-align: middle;
+}
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+@media (max-width: 768px) {
+  .card-content {
+    height: 10%;
+    padding: 13rem 0;
+  }
+}
 @media (max-width: 480px) {
+  .profile-card {
+    height: 70%;
+  }
   .size-small {
     padding: 0.4rem 0.8rem 0.4rem 0.6rem;
   }
@@ -452,13 +545,21 @@ const toggleCard = () => {
     width: 26px;
     height: 26px;
   }
+  .description {
+    font-size: 0.75rem;
+  }
+  .profile-card {
+    width: 100%;
+    max-width: 300px;
+    height: 280px; /* 移动端适当降低高度 */
+  }
 }
 
 /* tooltip 样式 */
 .profile-info::after {
   content: attr(data-tooltip);
   position: absolute;
-  bottom: 120%;
+  bottom: -50%;
   left: 50%;
   transform: translateX(-50%);
   background: rgba(100, 100, 100, 0.8);
@@ -480,7 +581,7 @@ const toggleCard = () => {
 .profile-info::before {
   content: '';
   position: absolute;
-  bottom: 102%;
+  bottom: -48%;
   left: 50%;
   transform: translateX(-50%);
   border-width: 5px;

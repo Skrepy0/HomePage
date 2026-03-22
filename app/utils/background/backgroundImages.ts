@@ -1,5 +1,5 @@
 // 此文件由脚本自动生成，请勿手动修改
-// 生成时间：2026/3/21 22:31:18
+// 生成时间：2026/3/22 15:17:53
 
 export const backgroundImageUrls: string[] = [
   '/background/1458542.png',
@@ -42,7 +42,6 @@ export const backgroundImageUrls: string[] = [
   '/background/18024150780136832.jpg',
   '/background/18030058566831488.jpg',
   '/background/18030175591648640.jpg',
-  '/background/18062774085406080.jpg',
   '/background/18096267465248128.jpg',
   '/background/18096968589692288.jpg',
   '/background/18251629707054464.jpg',

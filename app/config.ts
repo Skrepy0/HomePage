@@ -3,6 +3,12 @@ export const config = {
   username: 'Skrepy',
   tooltip: '来找咱呀~',
   description: '木叶飞舞之处，火亦生生不息',
+  type: {
+    type_speed: 150,
+    type_pause: 1500,
+    del_speed: 150,
+    del_pause: 1000,
+  },
   avatar: '/image/avatar.png',
   profile_card_size: 'medium',
   links: {
@@ -35,4 +41,23 @@ export const config = {
       url: 'https://www.luogu.com.cn/user/1862372',
     },
   },
+  blog_cards: [
+    {
+      id: 2,
+      title: '没了',
+      description: 'qwq',
+      link: '#',
+      linkText: 'qwq',
+      icon: 'mdi:note-text',
+    },
+    {
+      id: 1,
+      title: '还是没了',
+      description: 'QWQ',
+      link: '#',
+      linkText: 'QWQ',
+      icon: 'mdi:blog',
+    },
+  ],
+  key: 'SCDTqO9DlBPZTeN0n',
 }

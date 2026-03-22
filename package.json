@@ -18,6 +18,7 @@
     "lunar-calendar": "^0.1.4",
     "lunar-javascript": "^1.7.7",
     "nuxt": "^4.4.2",
+    "pinyin-pro": "^3.28.0",
     "sf-vue-animated-cursor": "^1.0.0",
     "vue": "^3.5.30",
     "vue-router": "^5.0.3"

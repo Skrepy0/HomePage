@@ -7,7 +7,7 @@
           >MIT</a
         >.
         <br />
-        由Skrepy使用
+        由 Skrepy 使用
         <a
           target="_blank"
           style="color: #419972"
@@ -21,14 +21,18 @@
           href="https://github.com/nuxt/nuxt"
           >Nuxt</a
         >
-        编写✏️
-        <br />
+        编写✏️<br />
+        <span class="commit-wrapper">
+          <CommitCount :isDark="isDark" />
+        </span>
       </div>
     </div>
   </footer>
 </template>
 
 <script setup lang="ts">
+import CommitCount from '~/components/github/CommitCount.vue'
+
 const props = defineProps<{
   isDark?: boolean
 }>()
@@ -38,6 +42,7 @@ const currentYear = new Date().getFullYear()
 
 <style scoped lang="scss">
 @import '../../assets/css/main.scss';
+
 .footer {
   border-radius: 3px;
   left: 0;
@@ -49,12 +54,10 @@ const currentYear = new Date().getFullYear()
   color: rgba(255, 255, 255, 0.8);
   text-align: center;
   transition: background 0.8s ease;
-  flex: 1px;
   width: 100%;
   margin-top: 50px;
 }
 
-/* 暗色主题微调 */
 .footer.dark-mode {
   background: rgba(155, 155, 155, 0.3);
 }
@@ -75,9 +78,17 @@ const currentYear = new Date().getFullYear()
   opacity: 0.8;
   font-family: 'Comic', 'Comic Sans MS', serif;
   text-align: center;
+  line-height: 1.5;
 }
 
-/* 响应式 */
+/* 确保 CommitCount 组件行内显示，且不换行 */
+.commit-wrapper {
+  display: inline-block;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
+/* 可选：针对小屏幕调整 */
 @media (max-width: 768px) {
   .footer {
     padding: 1rem;
@@ -87,13 +98,16 @@ const currentYear = new Date().getFullYear()
     flex-direction: column;
     gap: 0.5rem;
   }
-  .footer-links {
-    gap: 1rem;
+  .commit-wrapper {
+    display: block;
+    margin-bottom: 0.25rem;
   }
 }
+
 a {
   @extend .cursor-solid;
 }
+
 .license {
   color: rgba(255, 255, 255, 0.8);
   @extend .cursor-solid;

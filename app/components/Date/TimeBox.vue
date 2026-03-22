@@ -165,12 +165,14 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 @import '../../../assets/css/components/container.scss';
+
 .time-box {
   width: 100%;
   border-radius: 24px;
   perspective: 1000px;
 }
 
+/* 正面和背面基础样式 */
 .card-front,
 .card-back {
   @extend .container-clear;
@@ -188,12 +190,14 @@ onUnmounted(() => {
   );
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   color: white;
+  padding: 0 0.5rem; /* 桌面端轻微内边距 */
 }
 
 .card-inner {
   position: relative;
   width: 100%;
-  height: 140px;
+  min-height: 140px;
+  height: auto;
   transition: transform 0.6s;
   transform-style: preserve-3d;
   border-radius: 24px;
@@ -213,6 +217,8 @@ onUnmounted(() => {
   line-height: 1.2;
   letter-spacing: 2px;
   font-family: 'Comic', cursive;
+  white-space: nowrap;
+  max-width: 100%;
 }
 
 .date {
@@ -224,19 +230,20 @@ onUnmounted(() => {
 .back-content {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.2rem;
   text-align: center;
   width: 90%;
+  padding: 0.5rem 0;
 }
 
 .greeting,
 .message {
   overflow: hidden;
-  white-space: nowrap;
+  white-space: normal;
+  word-break: break-word;
   border-right: 2px solid rgba(255, 255, 255, 0.7);
   width: fit-content;
   margin: 0 auto;
-  font-size: 1.8rem;
   font-family: 'HuaWenKaiTi', 'Comic Sans MS', cursive;
   animation: blink-caret 0.75s step-end infinite;
 }
@@ -274,21 +281,66 @@ onUnmounted(() => {
   transition: box-shadow 0.3s;
 }
 
-@media (max-width: 480px) {
+/* 平板及以下（≤768px） */
+@media (max-width: 768px) {
   .card-inner {
-    height: 130px;
+    min-height: 120px;
+    transform-origin: 54%;
   }
   .time {
-    font-size: 2rem;
+    font-size: 2.5rem;
   }
   .date {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
   }
   .greeting {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
   }
   .message {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
+  }
+  /* 调整内边距，与右侧卡片保持一致 */
+  .card-front,
+  .card-back {
+    padding: 0.7rem;
+  }
+}
+
+/* 手机（≤480px） */
+@media (max-width: 480px) {
+  .card-inner {
+    min-height: 110px;
+  }
+  .time {
+    font-size: 1.8rem;
+  }
+  .date {
+    font-size: 0.7rem;
+  }
+  .greeting {
+    font-size: 1.4rem;
+  }
+  .message {
+    font-size: 0.75rem;
+  }
+  .card-front,
+  .card-back {
+    width: 108%;
+    padding: 0.6rem;
+  }
+}
+
+/* 超小屏幕（≤360px） */
+@media (max-width: 360px) {
+  .time {
+    font-size: 1.5rem;
+  }
+  .date {
+    font-size: 0.6rem;
+  }
+  .card-front,
+  .card-back {
+    padding: 0.5rem;
   }
 }
 </style>

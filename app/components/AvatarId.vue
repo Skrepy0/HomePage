@@ -38,7 +38,7 @@ const sizeClass = `size-${props.size}`
 .avatar-id-card {
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(12px);
   border-radius: 60px;
