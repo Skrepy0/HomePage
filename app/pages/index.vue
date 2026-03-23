@@ -109,7 +109,7 @@ const bgImages = backgroundImageUrls
   position: fixed;
   top: 20px;
   right: 20px;
-  width: 400px; /* 固定宽度，容纳天气和按钮 */
+  width: 500px; /* 固定宽度，容纳天气和按钮 */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -118,7 +118,7 @@ const bgImages = backgroundImageUrls
 
 @media (max-width: 768px) {
   .top-right-bar {
-    width: 360px; /* 移动端适当缩小 */
+    width: 520px; /* 移动端适当缩小 */
     right: 12px;
     top: 12px;
   }
@@ -143,7 +143,11 @@ const bgImages = backgroundImageUrls
   z-index: 10;
   margin-top: 8px; /* 可选间距 */
 }
-
+.profile,
+.content-wrapper {
+  margin: 0 !important;
+  padding: 0 !important;
+}
 .content-wrapper {
   flex: 1;
   display: flex;
@@ -195,7 +199,6 @@ const bgImages = backgroundImageUrls
 }
 
 .cards-bottom {
-  max-width: 720px;
   width: 100%;
   margin-right: auto;
 }
@@ -204,12 +207,17 @@ const bgImages = backgroundImageUrls
   width: 104%;
   margin: 1rem auto 0;
 }
-
 @media (max-width: 768px) {
+  .profile .github-commit {
+    top: 25%;
+  }
   .main-layout {
     flex-direction: column;
     align-items: center;
     gap: 1.5rem;
+  }
+  .cards-bottom {
+    width: 105%;
   }
   .cards-top {
     width: 100%;

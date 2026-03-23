@@ -260,7 +260,6 @@ onUnmounted(() => {
   transition: opacity v-bind(transitionDuration + 'ms')
     cubic-bezier(0.4, 0, 0.2, 1);
   will-change: opacity;
-  filter: blur(2px);
 }
 
 .overlay {
@@ -275,5 +274,6 @@ onUnmounted(() => {
   z-index: 2;
   pointer-events: none;
   transition: background-color 0.3s ease;
+  backdrop-filter: blur(3px);
 }
 </style>

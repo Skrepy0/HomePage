@@ -265,6 +265,7 @@ onUnmounted(() => {
   max-width: 300px;
   height: 120px; /* 固定高度，根据实际内容调整 */
   color: white;
+  backdrop-filter: blur(5px);
 }
 .profile-card:hover {
   transform: translateY(-3px);

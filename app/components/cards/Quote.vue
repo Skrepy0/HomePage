@@ -1,10 +1,25 @@
 <template>
   <div class="words-container">
     <div class="words-wrapper">
-      <div class="words">「{{ currentQuote.text }}」</div>
-      <div class="quote-author">——《{{ currentQuote.author }}》</div>
+      <!-- 加载中状态 -->
+      <div v-if="loading" class="loading-message">加载中...</div>
+      <!-- 错误状态 -->
+      <div v-else-if="error" class="error-message">
+        {{ error }}
+        <button class="retry-btn" @click="refreshQuote">重试</button>
+      </div>
+      <!-- 成功显示名言 -->
+      <div v-else>
+        <div class="words">「{{ currentQuote.text }}」</div>
+        <div class="quote-author">——{{ currentQuote.author }}</div>
+      </div>
     </div>
-    <button class="refresh-quote-btn" @click="refreshQuote">
+    <button
+      class="refresh-quote-btn"
+      @click="refreshQuote"
+      :disabled="loading"
+      title="刷新"
+    >
       <svg
         class="refresh-icon"
         viewBox="0 0 1024 1024"
@@ -22,32 +37,50 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
-import { Quote } from '~/utils/init/initQuote.ts'
-const quotes = Quote
+import { ref, onMounted } from 'vue'
+
 const props = defineProps<{
   isDark?: boolean
 }>()
-const currentQuote = ref(quotes[0])
-let timer = null
 
-const getRandomQuote = () => {
-  const randomIndex = Math.floor(Math.random() * quotes.length)
-  currentQuote.value = quotes[randomIndex]
+const loading = ref(false)
+const error = ref('')
+const currentQuote = ref({ text: '', author: '' })
+
+const getRandomQuote = async () => {
+  loading.value = true
+  error.value = ''
+  try {
+    const res = await fetch('https://v1.hitokoto.cn/')
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    const data = await res.json()
+    if (!data) throw new Error('无数据')
+    currentQuote.value = {
+      text: data.hitokoto,
+      author: `${data.from_who ? data.from_who : '佚名'}《${data.from}》`,
+    }
+  } catch (err) {
+    console.error('获取名言失败:', err)
+    error.value = '加载失败，点击重试'
+  } finally {
+    loading.value = false
+  }
 }
 
 const refreshQuote = () => {
+  if (loading.value) return
   getRandomQuote()
 }
-refreshQuote()
-onUnmounted(() => {
-  if (timer) clearInterval(timer)
+
+onMounted(() => {
+  getRandomQuote()
 })
 </script>
 
 <style scoped lang="scss">
 @import '../../../assets/css/components/container';
 @import '../../../assets/css/main';
+
 .words-container {
   @extend .container-base;
   width: 100%;
@@ -61,18 +94,6 @@ onUnmounted(() => {
   box-sizing: border-box;
   padding: 0.8rem 1.2rem;
 }
-
-.words {
-  font-size: 1.2rem;
-  line-height: 1.5;
-  color: #f5f5f5;
-  font-weight: 500;
-  margin-bottom: 0.5rem;
-  font-family:
-    'HuaWenKaiTi', 'Comic', 'Noto Serif SC', 'Times New Roman', '宋体', serif;
-  letter-spacing: 0.02em;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-}
 .words-container:hover {
   box-shadow: 0 20px 30px
     v-bind('props.isDark ? "rgba(255, 255, 255, 0.4)" : "rgba(0, 0, 0, 0.4)"');
@@ -85,6 +106,18 @@ onUnmounted(() => {
   text-align: center;
 }
 
+.words {
+  font-size: 1.2rem;
+  line-height: 1.5;
+  color: #f5f5f5;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  font-family:
+    'HuaWenKaiTi', 'Comic', 'Noto Serif SC', 'Times New Roman', '宋体', serif;
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
 .quote-author {
   font-size: 0.75rem;
   color: #c0c0c0;
@@ -92,6 +125,30 @@ onUnmounted(() => {
   font-family: 'Comic', 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
   font-weight: 400;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+/* 加载和错误状态 */
+.loading-message,
+.error-message {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+  padding: 0.5rem 0;
+}
+.error-message {
+  cursor: pointer;
+}
+.error-message .retry-btn {
+  background: none;
+  border: none;
+  color: #00a1d6;
+  cursor: pointer;
+  margin-left: 0.5rem;
+  text-decoration: underline;
+  padding: 0;
+}
+.error-message .retry-btn:hover {
+  color: #ffffff;
 }
 
 .refresh-quote-btn {
@@ -109,16 +166,19 @@ onUnmounted(() => {
   flex-shrink: 0;
   margin-top: 0.2rem;
 }
-
-.refresh-quote-btn:hover {
+.refresh-quote-btn:hover:not(:disabled) {
   background: rgba(255, 255, 255, 0.35);
   transform: rotate(90deg);
   color: #ffffff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
-
-.refresh-quote-btn:active {
+.refresh-quote-btn:active:not(:disabled) {
   transform: rotate(180deg) scale(0.95);
+}
+.refresh-quote-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .refresh-icon {
@@ -129,8 +189,7 @@ onUnmounted(() => {
 /* 响应式 */
 @media (max-width: 480px) {
   .words-container {
-    width: 110%;
-    padding: 0.8rem 1rem;
+    width: 101%;
   }
   .words {
     font-size: 0.85rem;
@@ -149,9 +208,9 @@ onUnmounted(() => {
     height: 16px;
   }
 }
-@media (max-width: 768px) {
+@media (max-width: 575px) {
   .words-container {
-    width: 105%;
+    width: 101%;
   }
 }
 </style>

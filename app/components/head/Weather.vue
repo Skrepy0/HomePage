@@ -137,6 +137,7 @@ onMounted(() => {
   max-width: 110px;
   margin: 0 auto;
   padding: 0.6rem;
+  background: rgba(#5f93d6, 50%);
 }
 .weather-content {
   display: flex;
@@ -212,7 +213,7 @@ onMounted(() => {
 }
 @media (max-width: 480px) {
   .weather-card {
-    max-width: 30%;
+    max-width: 25%;
     padding: 0.5rem;
   }
   .temp {

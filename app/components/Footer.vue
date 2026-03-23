@@ -44,6 +44,8 @@ const currentYear = new Date().getFullYear()
 @import '../../assets/css/main.scss';
 
 .footer {
+  margin: 2rem auto;
+  position: absolute;
   border-radius: 3px;
   left: 0;
   backdrop-filter: blur(12px);
