@@ -11,7 +11,7 @@
           ></div>
         </div>
         <div class="preload-stats">
-          {{ Math.floor(loadedCount / totalImages) * 100 }}%
+          {{ Math.floor((loadedCount * 100) / totalImages) }}%
         </div>
       </div>
     </div>
@@ -39,7 +39,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="js">
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 
 const props = defineProps({
