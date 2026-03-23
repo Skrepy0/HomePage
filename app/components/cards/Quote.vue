@@ -46,8 +46,8 @@ onUnmounted(() => {
 </script>
 
 <style scoped lang="scss">
-@import '../../assets/css/components/container.scss';
-@import '../../assets/css/main.scss';
+@import '../../../assets/css/components/container';
+@import '../../../assets/css/main';
 .words-container {
   @extend .container-base;
   width: 100%;
@@ -151,7 +151,7 @@ onUnmounted(() => {
 }
 @media (max-width: 768px) {
   .words-container {
-    width: 110%;
+    width: 105%;
   }
 }
 </style>

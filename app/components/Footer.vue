@@ -31,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import CommitCount from '~/components/github/CommitCount.vue'
+import CommitCount from '~/components/cards/github/CommitCount.vue'
 
 const props = defineProps<{
   isDark?: boolean
@@ -46,8 +46,6 @@ const currentYear = new Date().getFullYear()
 .footer {
   border-radius: 3px;
   left: 0;
-  padding: 1.5rem 1rem;
-  background: rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-top: 1px solid rgba(100, 100, 100, 0.2);
@@ -55,7 +53,6 @@ const currentYear = new Date().getFullYear()
   text-align: center;
   transition: background 0.8s ease;
   width: 100%;
-  margin-top: 50px;
 }
 
 .footer.dark-mode {
@@ -88,21 +85,21 @@ const currentYear = new Date().getFullYear()
   vertical-align: middle;
 }
 
-/* 可选：针对小屏幕调整 */
-@media (max-width: 768px) {
-  .footer {
-    padding: 1rem;
-    margin-top: 2rem;
-  }
-  .footer-content {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  .commit-wrapper {
-    display: block;
-    margin-bottom: 0.25rem;
-  }
-}
+///* 可选：针对小屏幕调整 */
+//@media (max-width: 768px) {
+//  .footer {
+//    padding: 1rem;
+//    margin-top: 2rem;
+//  }
+//  .footer-content {
+//    flex-direction: column;
+//    gap: 0.5rem;
+//  }
+//  .commit-wrapper {
+//    display: block;
+//    margin-bottom: 0.25rem;
+//  }
+//}
 
 a {
   @extend .cursor-solid;

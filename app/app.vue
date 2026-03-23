@@ -17,6 +17,8 @@ useHead({
 @import '../assets/css/main.scss';
 .dynamic-cursor {
   @extend .cursor-normal;
+  margin: 0;
+  padding: 0;
 }
 html,
 body {

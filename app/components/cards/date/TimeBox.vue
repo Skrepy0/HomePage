@@ -164,7 +164,7 @@ onUnmounted(() => {
 </script>
 
 <style scoped lang="scss">
-@import '../../../assets/css/components/container.scss';
+@import '../../../../assets/css/components/container';
 
 .time-box {
   width: 100%;
@@ -303,6 +303,11 @@ onUnmounted(() => {
   .card-front,
   .card-back {
     padding: 0.7rem;
+  }
+  .card-front,
+  .card-back {
+    width: 105%;
+    transform-origin: 51.5%;
   }
 }
 

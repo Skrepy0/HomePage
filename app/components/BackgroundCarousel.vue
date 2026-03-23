@@ -10,7 +10,9 @@
             :style="{ width: (loadedCount / totalImages) * 100 + '%' }"
           ></div>
         </div>
-        <div class="preload-stats">{{ loadedCount }} / {{ totalImages }}</div>
+        <div class="preload-stats">
+          {{ Math.floor(loadedCount / totalImages) * 100 }}%
+        </div>
       </div>
     </div>
 
@@ -37,7 +39,7 @@
   </div>
 </template>
 
-<script setup lang="js">
+<script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 
 const props = defineProps({
@@ -245,6 +247,8 @@ onUnmounted(() => {
 }
 
 .bg-slide {
+  margin: 0;
+  padding: 0;
   position: absolute;
   top: 0;
   left: 0;

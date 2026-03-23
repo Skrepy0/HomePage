@@ -54,8 +54,8 @@
         </div>
       </div>
     </div>
-    <Footer :isDark="isDark" />
   </div>
+  <Footer :isDark="isDark" />
 </template>
 
 <script setup lang="ts">
@@ -63,15 +63,16 @@ import BackgroundCarousel from '~/components/BackgroundCarousel.vue'
 import { backgroundImageUrls } from '~/utils/background/backgroundImages'
 import FunctionLayouts from '~/components/head/FunctionLayouts.vue'
 import { ref, onMounted } from 'vue'
-import TimeBox from '~/components/Date/TimeBox.vue'
-import ProfileCard from '~/components/ProfileCard.vue'
-import Quote from '~/components/Quote.vue'
+import TimeBox from '~/components/cards/date/TimeBox.vue'
+import ProfileCard from '~/components/cards/ProfileCard.vue'
+import Quote from '~/components/cards/Quote.vue'
 import Footer from '~/components/Footer.vue'
-import TimeStats from '~/components/Date/TimeStats.vue'
-import GitHubLanguages from '~/components/github/GitHubLanguages.vue'
-import LinkBlocks from '~/components/LinkBlocks.vue'
+import TimeStats from '~/components/cards/date/TimeStats.vue'
+import GitHubLanguages from '~/components/cards/github/GitHubLanguages.vue'
+import LinkBlocks from '~/components/cards/LinkBlocks.vue'
 import Weather from '~/components/head/Weather.vue'
 import { config } from '~/config'
+import GithubCommit from '~/components/cards/github/GithubCommit.vue'
 const isDark = ref(false)
 const profileCardRef = ref<InstanceType<typeof ProfileCard>>()
 const blogCards = ref(config.blog_cards)
@@ -153,7 +154,6 @@ const bgImages = backgroundImageUrls
 .content {
   position: relative;
   z-index: 1;
-  width: 70%;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -181,15 +181,7 @@ const bgImages = backgroundImageUrls
   width: 100%;
 }
 
-.left-group {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  align-items: center;
-  width: 100%;
-  max-width: 360px;
-}
-
+.left-group,
 .right-group {
   display: flex;
   flex-direction: column;
@@ -203,6 +195,7 @@ const bgImages = backgroundImageUrls
 }
 
 .cards-bottom {
+  max-width: 720px;
   width: 100%;
   margin-right: auto;
 }
@@ -264,6 +257,7 @@ const bgImages = backgroundImageUrls
     max-width: 100% !important;
   }
   .quote-row {
+    width: 150%;
     max-width: calc(100% - 20px);
     margin: 1rem auto 0;
   }

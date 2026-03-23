@@ -187,7 +187,7 @@ onUnmounted(() => {
 </script>
 
 <style scoped lang="scss">
-@import '../../../assets/css/components/container.scss';
+@import '../../../../assets/css/components/container';
 
 .stats-card {
   @extend .container-base;

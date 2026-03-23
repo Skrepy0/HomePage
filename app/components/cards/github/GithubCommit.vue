@@ -73,6 +73,7 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
+@import '../../../../assets/css/main.scss';
 .github-commit {
   width: 100%;
 }
@@ -91,6 +92,7 @@ onMounted(() => {
 }
 .loading-placeholder,
 .error-placeholder {
+  @extend .cursor-solid;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -129,8 +129,7 @@ onUnmounted(() => {
             rel="noopener noreferrer"
             class="social-link"
             :data-tooltip="links.github.title"
-            @mouseenter="setHover(true)"
-            @mouseleave="setHover(false)"
+            @mouseenter="setHover(!hoverGithub)"
           >
             <svg class="icon" viewBox="0 0 24 24" width="24" height="24">
               <path
@@ -256,8 +255,8 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="scss">
-@import '../../assets/css/components/container.scss';
-@import '../../assets/css/main.scss';
+@import '../../../assets/css/components/container';
+@import '../../../assets/css/main';
 
 .profile-card {
   display: inline-flex;
@@ -522,6 +521,9 @@ onUnmounted(() => {
   }
 }
 @media (max-width: 768px) {
+  .profile-card {
+    height: 280px; /* 移动端适当降低高度 */
+  }
   .card-content {
     height: 10%;
     padding: 13rem 0;

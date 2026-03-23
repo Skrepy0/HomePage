@@ -44,8 +44,8 @@ const props = defineProps<{
 </script>
 
 <style scoped lang="scss">
-@import '../../assets/css/main.scss';
-@import '../../assets/css/components/container.scss';
+@import '../../../assets/css/main';
+@import '../../../assets/css/components/container';
 a {
   @extend .cursor-solid;
 }

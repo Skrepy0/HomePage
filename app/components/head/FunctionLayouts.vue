@@ -87,7 +87,7 @@ button {
   height: 48px;
   border-radius: 50%;
   background: v-bind(
-    'props.isDark ? "rgba(200, 200, 200, 0.4)" : "rgba(80, 80, 80, 0.25)"'
+    'props.isDark ? "rgba(200, 200, 200, 0.3)" : "rgba(80, 80, 80, 0.25)"'
   );
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);

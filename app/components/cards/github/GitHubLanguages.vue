@@ -68,7 +68,7 @@ const props = defineProps<{
   isDark?: boolean
   showSnake?: boolean
 }>()
-
+const sizeClass = `github-card-${props.size || 'medium'}`
 const {
   languages,
   loading: langLoading,
@@ -101,9 +101,9 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-@import '../../../assets/css/components/container.scss';
-@import '../../../assets/css/main.scss';
-@import '../../../assets/css/fonts.scss';
+@import '../../../../assets/css/components/container';
+@import '../../../../assets/css/main';
+@import '../../../../assets/css/fonts';
 .github-card {
   @extend .container-base;
   background: v-bind(

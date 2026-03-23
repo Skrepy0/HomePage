@@ -53,7 +53,7 @@ const description = ref('')
 const weatherIcon = ref('wi:day-sunny')
 const loading = ref(false)
 const error = ref('')
-
+let timer
 // 去除地区后缀（直辖市不处理）
 const removeSuffix = (name: string): string => {
   if (!name) return ''
@@ -125,6 +125,7 @@ const refresh = () => {
 
 onMounted(() => {
   fetchWeather()
+  timer = setInterval(fetchWeather, 600000)
 })
 </script>
 
