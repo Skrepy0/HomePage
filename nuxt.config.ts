@@ -31,5 +31,5 @@ export default defineNuxtConfig({
     },
     runtimeConfig: {
         seniverseApiKey: 'SCDTqO9DlBPZTeN0n',
-    }
+    },
 })

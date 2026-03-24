@@ -40,7 +40,6 @@ import {
   convertToPinyin,
   getCityNameByPinyin,
 } from '~/utils/weather/cityPinyinMap'
-import { pinyin } from 'pinyin-pro'
 
 const props = defineProps<{
   isDark?: boolean
@@ -95,7 +94,7 @@ const fetchWeather = async () => {
       temperature: string
       weather:string
     }
-    const weatherData:WeatherInfo = await $fetch('/api/weather', {
+    const weatherData:WeatherInfo = await $fetch('https://api.skrepy.dpdns.org/api/get_weather', {
       method: 'POST',
       body: { location:cityPinyin  }
     })
