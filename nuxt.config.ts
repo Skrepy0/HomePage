@@ -1,32 +1,35 @@
 export default defineNuxtConfig({
-  compatibilityDate: '2025-07-15',
-  devtools: { enabled: true },
-  ssr: true,
-  vite: {
-    css: {
-      preprocessorOptions: {
-        scss: {
-          silenceDeprecations: ['import'], // 抑制 @import 弃用警告
+    compatibilityDate: '2025-07-15',
+    devtools: {enabled: true},
+    ssr: true,
+    vite: {
+        css: {
+            preprocessorOptions: {
+                scss: {
+                    silenceDeprecations: ['import'], // 抑制 @import 弃用警告
+                },
+            },
         },
-      },
     },
-  },
-  app: {
-    head: {
-      meta: [
-        {
-          name: 'viewport',
-          content:
-            'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes',
+    app: {
+        head: {
+            meta: [
+                {
+                    name: 'viewport',
+                    content:
+                        'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes',
+                },
+            ],
+            link: [
+                {
+                    rel: 'icon',
+                    type: 'image/ico',
+                    href: '/image/favicon.ico',
+                },
+            ],
         },
-      ],
-      link: [
-        {
-          rel: 'icon',
-          type: 'image/ico',
-          href: '/image/favicon.ico',
-        },
-      ],
     },
-  },
+    runtimeConfig: {
+        seniverseApiKey: 'SCDTqO9DlBPZTeN0n',
+    }
 })

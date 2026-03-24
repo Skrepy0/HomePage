@@ -91,20 +91,20 @@ const fetchWeather = async () => {
     console.log('定位城市拼音:', cityPinyin)
 
     // 2. 请求天气 API
-    const key = config.key
-    if (!key) throw new Error('未配置心知天气密钥')
-    const url = `https://api.seniverse.com/v3/weather/now.json?key=${key}&location=${encodeURIComponent(cityPinyin)}&language=zh-Hans&unit=c`
+    interface WeatherInfo{
+      temperature: string
+      weather:string
+    }
+    const weatherData:WeatherInfo = await $fetch('/api/weather', {
+      method: 'POST',
+      body: { location:cityPinyin  }
+    })
 
-    const weatherRes = await fetch(url)
-    if (!weatherRes.ok) throw new Error(`HTTP ${weatherRes.status}`)
-    const weatherData = await weatherRes.json()
-
-    if (weatherData.results && weatherData.results.length) {
-      const now = weatherData.results[0].now
-      temperature.value = Math.round(Number(now.temperature)).toString()
-      description.value = now.text
+    if (weatherData) {
+      temperature.value = weatherData["temperature"]
+      description.value = weatherData["weather"]
       location.value = cityChinese
-      weatherIcon.value = weatherTextToIcon[now.text] || 'wi:na'
+      weatherIcon.value = weatherTextToIcon[description.value] || 'wi:na'
     } else {
       throw new Error('天气数据格式错误')
     }
