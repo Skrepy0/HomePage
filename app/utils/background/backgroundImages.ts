@@ -1,11 +1,10 @@
 // 此文件由脚本自动生成，请勿手动修改
-// 生成时间：2026/3/22 15:17:53
+// 生成时间：2026/3/24 15:10:57
 
 export const backgroundImageUrls: string[] = [
   '/background/1458542.png',
   '/background/1542542.png',
   '/background/15477803181838656.jpg',
-  '/background/15477813916373312.jpg',
   '/background/15477817207984448.jpg',
   '/background/15557852926218560.jpg',
   '/background/15639151963443520.jpg',
@@ -32,16 +31,13 @@ export const backgroundImageUrls: string[] = [
   '/background/17751385391222144.jpg',
   '/background/17814183921241472.jpg',
   '/background/17838053713038720.jpg',
-  '/background/17873560258071936.jpg',
   '/background/17877921703054720.jpg',
   '/background/17884817766403456.jpg',
-  '/background/17904648454458752.jpg',
   '/background/17905404854324608.jpg',
   '/background/17983385643568512.jpg',
   '/background/17990582196292992.jpg',
   '/background/18024150780136832.jpg',
   '/background/18030058566831488.jpg',
-  '/background/18030175591648640.jpg',
   '/background/18096267465248128.jpg',
   '/background/18096968589692288.jpg',
   '/background/18251629707054464.jpg',
@@ -52,7 +48,6 @@ export const backgroundImageUrls: string[] = [
   '/background/18453468473707904.jpg',
   '/background/18466675041947008.jpg',
   '/background/18522428227243392.jpg',
-  '/background/18545088552095104.jpg',
   '/background/18590881332972928.jpg',
   '/background/18675574276017536.jpg',
   '/background/18675831177334144.jpg',

@@ -191,9 +191,6 @@ onUnmounted(() => {
 
 .stats-card {
   @extend .container-base;
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
   min-height: 100px; /* 降低最小高度 */
   display: flex;
   flex-direction: column;
@@ -251,16 +248,7 @@ onUnmounted(() => {
   transition: width 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);
 }
 
-/* 固定尺寸（小巧版） */
-.stats-medium {
-  width: 300px; /* 桌面宽度缩小 */
-}
-
 @media (max-width: 480px) {
-  .stats-medium {
-    width: 100%;
-    max-width: 240px; /* 移动端最大宽度缩小 */
-  }
   .stat-item {
     font-size: 0.75rem;
   }

@@ -111,7 +111,6 @@ onMounted(() => {
   );
   padding: 0.8rem;
   color: white;
-  width: 101%;
   display: flex;
   flex-direction: column;
   text-align: center;
@@ -265,8 +264,8 @@ onMounted(() => {
   }
   .github-card.stats-small,
   .github-card.stats-medium {
-    width: 100%;
-    max-width: 260px;
+    //width: 100%;
+    //max-width: 260px;
   }
   .lang-labels {
     grid-template-columns: 1fr;

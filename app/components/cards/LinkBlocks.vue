@@ -50,7 +50,7 @@ a {
   @extend .cursor-solid;
 }
 .double-card-horizontal {
-  width: 360px; /* 固定宽度，与 TimeStats 等卡片一致 */
+  width: 100%;
   display: flex;
   gap: 0.8rem;
   margin: 0 auto;
@@ -119,21 +119,21 @@ a {
 }
 @media (max-width: 768px) {
   .double-card-horizontal {
-    width: 105%;
+    //width: 105%;
   }
   .horizontal-card {
-    width: 108%;
+    //width: 108%;
   }
 }
 /* 移动端：宽度自适应，卡片垂直排列 */
 @media (max-width: 480px) {
   .double-card-horizontal {
-    width: 108%;
+    //width: 108%;
     flex-direction: row;
     gap: 0.8rem;
   }
   .horizontal-card {
-    width: 100%;
+    //width: 100%;
   }
 }
 </style>

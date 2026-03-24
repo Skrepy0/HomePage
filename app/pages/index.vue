@@ -156,6 +156,7 @@ const bgImages = backgroundImageUrls
 }
 
 .content {
+  margin: 3rem;
   position: relative;
   z-index: 1;
   min-height: 100vh;
@@ -173,7 +174,6 @@ const bgImages = backgroundImageUrls
   align-items: center;
   gap: 1.5rem;
   width: 100%;
-  max-width: 1200px;
   margin-bottom: 2rem;
 }
 
@@ -182,7 +182,7 @@ const bgImages = backgroundImageUrls
   flex-direction: row;
   justify-content: center;
   gap: 1.5rem;
-  width: 100%;
+  width: 110%;
 }
 
 .left-group,
@@ -191,21 +191,20 @@ const bgImages = backgroundImageUrls
   flex-direction: column;
   gap: 1.5rem;
   width: 100%;
-  max-width: 360px;
-}
-
-.right-group > * {
-  width: 100%;
 }
 
 .cards-bottom {
-  width: 100%;
-  margin-right: auto;
+  width: 110%;
 }
 
 .quote-row {
-  width: 104%;
   margin: 1rem auto 0;
+}
+@media (min-width: 768px) {
+  .cards-row {
+    max-width: 600px;
+    min-width: 600px;
+  }
 }
 @media (max-width: 768px) {
   .profile .github-commit {
@@ -216,9 +215,7 @@ const bgImages = backgroundImageUrls
     align-items: center;
     gap: 1.5rem;
   }
-  .cards-bottom {
-    width: 105%;
-  }
+  .cards-bottom,
   .cards-top {
     width: 100%;
   }
@@ -252,20 +249,16 @@ const bgImages = backgroundImageUrls
     align-items: center; /* 水平居中子元素 */
     gap: 1rem;
   }
-  .left-group,
-  .right-group {
+  .left-group {
     width: 100%;
     max-width: calc(100% - 20px);
     margin: 0 auto; /* 确保居中（冗余但安全） */
   }
-  /* 强制右组内所有卡片宽度填满 */
-  .right-group .github-card,
-  .right-group .stats-card {
-    width: 100% !important;
-    max-width: 100% !important;
+  .right-group {
+    max-width: calc(100% - 20px);
+    margin: 0 auto; /* 确保居中（冗余但安全） */
   }
   .quote-row {
-    width: 150%;
     max-width: calc(100% - 20px);
     margin: 1rem auto 0;
   }

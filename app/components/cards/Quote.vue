@@ -2,7 +2,7 @@
   <div class="words-container">
     <div class="words-wrapper">
       <!-- 加载中状态 -->
-      <div v-if="loading" class="loading-message">加载中...</div>
+      <div v-if="loading" class="loading-message">加载一言中...</div>
       <!-- 错误状态 -->
       <div v-else-if="error" class="error-message">
         {{ error }}
@@ -18,7 +18,7 @@
       class="refresh-quote-btn"
       @click="refreshQuote"
       :disabled="loading"
-      title="刷新"
+      title="刷新一言"
     >
       <svg
         class="refresh-icon"
@@ -54,14 +54,14 @@ const getRandomQuote = async () => {
     const res = await fetch('https://v1.hitokoto.cn/')
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
     const data = await res.json()
-    if (!data) throw new Error('无数据')
+    if (!data) throw new Error('无一言数据')
     currentQuote.value = {
       text: data.hitokoto,
-      author: `${data.from_who ? data.from_who : '佚名'}《${data.from}》`,
+      author: `${data.from_who ? data.from_who : ''}${data.from ? '《' + data.from + '》' : ''}`,
     }
   } catch (err) {
-    console.error('获取名言失败:', err)
-    error.value = '加载失败，点击重试'
+    console.error('获取一言失败:', err)
+    error.value = '加载一言失败，点击重试'
   } finally {
     loading.value = false
   }
@@ -84,6 +84,7 @@ onMounted(() => {
 .words-container {
   @extend .container-base;
   width: 100%;
+  min-height: 80px;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -92,7 +93,7 @@ onMounted(() => {
   );
   gap: 12px;
   box-sizing: border-box;
-  padding: 0.8rem 1.2rem;
+  padding: 0.8rem 1rem;
 }
 .words-container:hover {
   box-shadow: 0 20px 30px
@@ -188,9 +189,6 @@ onMounted(() => {
 
 /* 响应式 */
 @media (max-width: 480px) {
-  .words-container {
-    width: 101%;
-  }
   .words {
     font-size: 0.85rem;
     line-height: 1.5;
@@ -206,11 +204,6 @@ onMounted(() => {
   .refresh-icon {
     width: 16px;
     height: 16px;
-  }
-}
-@media (max-width: 575px) {
-  .words-container {
-    width: 101%;
   }
 }
 </style>

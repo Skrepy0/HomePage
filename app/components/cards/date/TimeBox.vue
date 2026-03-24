@@ -285,7 +285,7 @@ onUnmounted(() => {
 @media (max-width: 768px) {
   .card-inner {
     min-height: 120px;
-    transform-origin: 54%;
+    // transform-origin: 56%;
   }
   .time {
     font-size: 2.5rem;
@@ -306,8 +306,8 @@ onUnmounted(() => {
   }
   .card-front,
   .card-back {
-    width: 105%;
-    transform-origin: 51.5%;
+    //width: 105%;
+    //transform-origin: 51.5%;
   }
 }
 
@@ -330,7 +330,7 @@ onUnmounted(() => {
   }
   .card-front,
   .card-back {
-    width: 108%;
+    //width: 108%;
     padding: 0.6rem;
   }
 }
