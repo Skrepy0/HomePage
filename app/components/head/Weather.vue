@@ -90,20 +90,23 @@ const fetchWeather = async () => {
     console.log('定位城市拼音:', cityPinyin)
 
     // 2. 请求天气 API
-    interface WeatherInfo{
+    interface WeatherInfo {
       temperature: string
-      weather:string
+      weather: string
       city: string
     }
-    const weatherData:WeatherInfo = await $fetch('https://api.skrepy.dpdns.org/api/get_weather', {
-      method: 'POST',
-      body: { location:cityPinyin  }
-    })
+    const weatherData: WeatherInfo = await $fetch(
+      'https://api.skrepy.dpdns.org/api/get_weather',
+      {
+        method: 'POST',
+        body: { location: cityPinyin },
+      }
+    )
 
     if (weatherData) {
-      temperature.value = weatherData["temperature"]
-      description.value = weatherData["weather"]
-      location.value = weatherData["city"]
+      temperature.value = weatherData['temperature']
+      description.value = weatherData['weather']
+      location.value = weatherData['city']
       weatherIcon.value = weatherTextToIcon[description.value] || 'wi:na'
     } else {
       throw new Error('天气数据格式错误')
@@ -213,7 +216,7 @@ onMounted(() => {
 }
 @media (max-width: 480px) {
   .weather-card {
-    max-width: 25%;
+    max-width: 15%;
     padding: 0.5rem;
   }
   .temp {

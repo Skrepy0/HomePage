@@ -109,7 +109,7 @@ const bgImages = backgroundImageUrls
   position: fixed;
   top: 20px;
   right: 20px;
-  width: 500px; /* 固定宽度，容纳天气和按钮 */
+  width: 650px; /* 固定宽度，容纳天气和按钮 */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -118,7 +118,7 @@ const bgImages = backgroundImageUrls
 
 @media (max-width: 768px) {
   .top-right-bar {
-    width: 520px; /* 移动端适当缩小 */
+    width: 590px; /* 移动端适当缩小 */
     right: 12px;
     top: 12px;
   }
