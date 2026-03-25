@@ -59,5 +59,4 @@ export const config = {
       icon: 'mdi:blog',
     },
   ],
-  key: 'SCDTqO9DlBPZTeN0n',
 }
