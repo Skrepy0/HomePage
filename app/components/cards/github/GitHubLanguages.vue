@@ -59,7 +59,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useGithubLanguages } from '~/utils/composables/useGithubLanguages'
+import { useGithubLanguages } from '~/utils/composables/github/useGithubLanguages'
 import { LanguageColors } from '~/utils/init/initLanguageColors'
 import GithubCommit from './GithubCommit.vue'
 

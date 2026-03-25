@@ -30,7 +30,7 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { useGitHubCommits } from '~/utils/composables/useGitHubCommits'
+import { useGitHubCommits } from '~/utils/composables/github/useGitHubCommits'
 
 const props = defineProps<{
   isDark?: boolean

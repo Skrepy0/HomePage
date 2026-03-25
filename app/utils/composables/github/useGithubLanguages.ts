@@ -1,4 +1,3 @@
-// composables/useGithubLanguages.ts
 import { ref } from 'vue'
 
 interface LanguageStats {
