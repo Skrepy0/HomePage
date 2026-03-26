@@ -95,7 +95,8 @@ const handleSwitch = () => {
 const bgImages = backgroundImageUrls
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import '../../assets/css/page-transition.scss';
 .main-layout {
   display: flex;
   align-items: center;
@@ -118,7 +119,7 @@ const bgImages = backgroundImageUrls
 
 @media (max-width: 768px) {
   .top-right-bar {
-    width: 610px; /* 移动端适当缩小 */
+    width: 600px;
     right: 12px;
     top: 12px;
   }

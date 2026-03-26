@@ -84,7 +84,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue' // 补充导入 watch
 import { useAudio } from '../../utils/composables/music/useAudio'
 import { usePlaylist } from '../../utils/composables/music/usePlaylist.ts'
 import { useMediaSession } from '../../utils/composables/music/useMediaSession.ts'
@@ -96,7 +96,9 @@ const props = defineProps<{
   isDark?: boolean
 }>()
 
-const emit = defineEmits(['close'])
+// 第 28 行附近，将 defineEmits 改为：
+const emit = defineEmits(['close', 'playingStateChange'])
+
 const playerRef = ref<HTMLElement | null>(null)
 const volume = ref(0.5)
 
@@ -120,7 +122,7 @@ const {
   audio.initAudio()
 })
 
-// 音频逻辑（正确使用 audio 对象）
+// 音频逻辑
 const audio = useAudio(currentSong, volume, () => {
   if (mode.value === 'single') {
     audio.play()
@@ -128,6 +130,7 @@ const audio = useAudio(currentSong, volume, () => {
     playlistNext()
   }
 })
+
 // 媒体会话
 useMediaSession(
   currentSong,
@@ -142,6 +145,7 @@ useMediaSession(
     }
   }
 )
+
 // 音量滑块样式
 const { volumeSlider, updateVolumeFill } = useVolumeSlider(volume)
 
@@ -191,6 +195,14 @@ const progressPercent = computed(() => {
   if (!audio.duration.value) return 0
   return (audio.currentTime.value / audio.duration.value) * 100
 })
+
+// 监听播放状态变化，主动通知父组件
+watch(
+  () => audio.isPlaying.value,
+  (newVal) => {
+    emit('playingStateChange', newVal)
+  }
+)
 
 // 初始加载歌单
 fetchPlaylist()
