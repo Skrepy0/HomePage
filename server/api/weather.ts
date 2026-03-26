@@ -10,7 +10,6 @@ export default defineEventHandler(async (event) => {
   }
 
   const apiKey = useRuntimeConfig().apiKey
-  console.log(apiKey)
   if (!apiKey) {
     throw createError({
       statusCode: 500,

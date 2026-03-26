@@ -7,7 +7,7 @@ export function usePlaylist(onSongChange: () => void) {
   const error = ref('')
   const currentIndex = ref(0)
   const mode = ref<'loop' | 'random' | 'single'>('loop')
-
+  const platforms = ['netease', 'kugou', 'baidu', 'kuwo']
   const currentSong = computed(() => songs.value[currentIndex.value])
   const hasPrev = computed(
     () => songs.value.length > 1 && currentIndex.value > 0
@@ -31,13 +31,14 @@ export function usePlaylist(onSongChange: () => void) {
     loading.value = true
     error.value = ''
     try {
-      const res = await fetch('/api/musics')
+      const randomIndex = Math.floor(Math.random() * platforms.length)
+      const res = await fetch(`/api/musics?platform=${platforms[randomIndex]}`)
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const data = await res.json()
       if (data.code === 200 && data.data?.length) {
         songs.value = data.data
-        // 随机选择初始歌曲
-        currentIndex.value = Math.floor(Math.random() * songs.value.length)
+        // 初始歌曲
+        currentIndex.value = 0
         onSongChange()
       } else {
         error.value = data.message || '获取歌单失败'

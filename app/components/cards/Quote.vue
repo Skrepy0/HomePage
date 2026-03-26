@@ -9,7 +9,7 @@
         <button class="retry-btn" @click="refreshQuote">重试</button>
       </div>
       <!-- 成功显示名言 -->
-      <div v-else>
+      <div v-else :key="currentQuote.text">
         <div class="words">「{{ currentQuote.text }}」</div>
         <div class="quote-author">——{{ currentQuote.author }}</div>
       </div>
@@ -81,6 +81,28 @@ onMounted(() => {
 @import '../../../assets/css/components/container';
 @import '../../../assets/css/main';
 
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .words-container {
   @extend .container-base;
   width: 100%;
@@ -117,6 +139,7 @@ onMounted(() => {
     'HuaWenKaiTi', 'Comic', 'Noto Serif SC', 'Times New Roman', '宋体', serif;
   letter-spacing: 0.02em;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.5s ease-out;
 }
 
 .quote-author {
@@ -126,6 +149,7 @@ onMounted(() => {
   font-family: 'Comic', 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
   font-weight: 400;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.5s ease-out;
 }
 
 /* 加载和错误状态 */
@@ -135,6 +159,7 @@ onMounted(() => {
   color: rgba(255, 255, 255, 0.7);
   text-align: center;
   padding: 0.5rem 0;
+  animation: blink 1s infinite;
 }
 .error-message {
   cursor: pointer;

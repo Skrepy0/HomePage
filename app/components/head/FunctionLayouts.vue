@@ -31,7 +31,7 @@
       id="fortune-button"
       type="button"
       :aria-label="tooltipText"
-      :disabled="isFortuneLocked"
+      :disabled="isFortuneLocked || isFortuneLoading"
       @click="updateFortune"
     >
       <span class="fortune-container">
@@ -79,6 +79,18 @@
         <span v-if="isFortuneLocked" class="fortune-value">{{
           fortuneValue
         }}</span>
+        <svg
+          v-if="isFortuneLoading"
+          class="loading-spinner"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M4 12a8 8 0 018-8V2.5a.5.5 0 011 0V4a8 8 0 010 16v1.5a.5.5 0 01-1 0V20a8 8 0 01-8-8z"
+            fill="currentColor"
+          />
+        </svg>
       </span>
     </button>
 
@@ -149,6 +161,7 @@ const STORAGE_KEY = 'fortune_today'
 
 const fortuneValue = ref(0)
 const isFortuneLocked = ref(false) // 是否已计算过（当天不可再点）
+const isFortuneLoading = ref(false) // 是否正在加载中
 // 圆环周长
 const circumference = 2 * Math.PI * 20 // ≈125.66
 
@@ -202,11 +215,15 @@ const loadFortune = () => {
 
 // 更新人品值（点击时调用）
 const updateFortune = () => {
-  if (isFortuneLocked.value) return // 已计算过，不能再点
-  const newValue = generateFortune()
-  fortuneValue.value = newValue
-  saveFortune(newValue)
-  isFortuneLocked.value = true
+  if (isFortuneLocked.value || isFortuneLoading.value) return // 已计算过或正在加载，不能再点
+  isFortuneLoading.value = true
+  setTimeout(() => {
+    const newValue = generateFortune()
+    fortuneValue.value = newValue
+    saveFortune(newValue)
+    isFortuneLocked.value = true
+    isFortuneLoading.value = false
+  }, 1000) // 模拟1秒加载时间
 }
 const tooltipText = computed(() => {
   if (!isFortuneLocked.value) return '今日人品'
@@ -308,12 +325,15 @@ button {
   }
 }
 
-/* 音乐按钮旋转动画 */
 .music-button.playing .icon {
   animation: spin 2s linear infinite;
+  transform-origin: center; /* 可选，确保旋转中心 */
 }
 
 @keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
   to {
     transform: rotate(360deg);
   }
@@ -387,5 +407,27 @@ button {
   @media (max-width: 640px) {
     font-size: 12px;
   }
+}
+
+/* 加载状态样式 */
+.fortune-button:disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+.fortune-button.loading .fortune-svg circle {
+  stroke: #3498db;
+  transition: none;
+}
+.fortune-button.loading .fortune-value {
+  opacity: 0;
+}
+.loading-spinner {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  animation: spin 1s linear infinite;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 </style>
