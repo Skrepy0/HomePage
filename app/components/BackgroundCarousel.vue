@@ -49,8 +49,8 @@ const props = defineProps({
   isDark: { type: Boolean, default: false },
 })
 
-const imagesLoaded = ref(false) // 是否已完成预加载
-const loadedCount = ref(0) // 已加载图片数量
+const imagesLoaded = ref(false)
+const loadedCount = ref(0)
 const totalImages = computed(() => props.images.length)
 
 // 预加载所有图片
@@ -77,31 +77,65 @@ const preloadImages = () => {
   })
 }
 
-// 轮播相关逻辑（与之前相同，略）
+// 轮播相关变量
 const currentIndex = ref(0)
 const nextIndex = ref(1)
 const isAnimating = ref(false)
 let timer = null
 let transitionTimer = null
 
-const getRandomDifferentIndex = (current, total) => {
-  if (total <= 1) return 0
-  let next
-  do {
-    next = Math.floor(Math.random() * total)
-  } while (next === current)
+// 假随机顺序列表
+let shuffledOrder = [] // 存储打乱后的索引顺序
+let orderPointer = 0 // 当前取到的位置（下一个要取的索引）
+
+// Fisher-Yates 洗牌
+const shuffleArray = (arr) => {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[arr[i], arr[j]] = [arr[j], arr[i]]
+  }
+  return arr
+}
+
+// 重新生成顺序列表（全部索引的随机排列）
+const regenerateOrder = () => {
+  const order = Array.from({ length: totalImages.value }, (_, i) => i)
+  shuffledOrder = shuffleArray(order)
+  orderPointer = 0
+}
+
+// 初始化顺序列表，并根据当前索引设置指针位置（保证下一个取的不会重复）
+const initOrderAndSetPointer = () => {
+  regenerateOrder()
+  // 找到当前索引在顺序列表中的位置
+  const pos = shuffledOrder.indexOf(currentIndex.value)
+  if (pos !== -1) {
+    // 指针指向下一个位置（如果当前是最后一个，则取第一个，即重新洗牌？但我们希望取完后重新洗牌，所以指针指向下一个，当超出长度时 regenerateOrder）
+    orderPointer = (pos + 1) % shuffledOrder.length
+  } else {
+    // 理论不会发生，但万一发生则重置指针
+    orderPointer = 0
+  }
+}
+
+// 获取下一张图片的索引（按顺序列表，若已到末尾则重新洗牌）
+const getNextOrderedIndex = () => {
+  if (!shuffledOrder.length || orderPointer >= shuffledOrder.length) {
+    regenerateOrder()
+  }
+  const next = shuffledOrder[orderPointer]
+  orderPointer++
   return next
 }
 
+// 启动自动轮播（使用顺序列表）
 const startCarousel = () => {
   if (process.client && props.images.length > 1) {
     stopCarousel()
     timer = setInterval(() => {
       if (isAnimating.value) return
-      nextIndex.value = getRandomDifferentIndex(
-        currentIndex.value,
-        props.images.length
-      )
+      // 获取下一张（顺序列表，保证一轮内不重复且与当前不重复）
+      nextIndex.value = getNextOrderedIndex()
       isAnimating.value = true
       transitionTimer = setTimeout(() => {
         currentIndex.value = nextIndex.value
@@ -122,13 +156,11 @@ const stopCarousel = () => {
   }
 }
 
+// 手动切换到下一张（对外暴露）
 const manuallyGoToNext = () => {
   if (!process.client || props.images.length <= 1 || isAnimating.value) return
   stopCarousel()
-  nextIndex.value = getRandomDifferentIndex(
-    currentIndex.value,
-    props.images.length
-  )
+  nextIndex.value = getNextOrderedIndex()
   isAnimating.value = true
   transitionTimer = setTimeout(() => {
     currentIndex.value = nextIndex.value
@@ -139,16 +171,18 @@ const manuallyGoToNext = () => {
 
 defineExpose({ next: manuallyGoToNext })
 
+// 监听图片列表变化
 watch(
   () => props.images,
   (newImages) => {
     if (newImages.length) {
       if (process.client) {
+        // 随机选择初始索引
         currentIndex.value = Math.floor(Math.random() * newImages.length)
-        nextIndex.value = getRandomDifferentIndex(
-          currentIndex.value,
-          newImages.length
-        )
+        // 初始化顺序列表并设置指针
+        initOrderAndSetPointer()
+        // 下一张从顺序列表中取第一个（避免与当前相同）
+        nextIndex.value = getNextOrderedIndex()
       } else {
         currentIndex.value = 0
         nextIndex.value = 1 % newImages.length
@@ -166,13 +200,13 @@ onMounted(async () => {
     const randomIndex = Math.floor(Math.random() * props.images.length)
     if (randomIndex !== currentIndex.value) {
       currentIndex.value = randomIndex
-      nextIndex.value = getRandomDifferentIndex(
-        currentIndex.value,
-        props.images.length
-      )
     }
-    await preloadImages() // 等待预加载完成
-    startCarousel() // 预加载完成后启动轮播
+    // 初始化顺序列表并设置指针（必须在 currentIndex 确定后）
+    initOrderAndSetPointer()
+    // 下一张从顺序列表中取（不一定是原 nextIndex，重新设置）
+    nextIndex.value = getNextOrderedIndex()
+    await preloadImages()
+    startCarousel()
   }
 })
 

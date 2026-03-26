@@ -256,12 +256,12 @@ a {
     }
   }
   .progress-bar {
+    @extend .cursor-solid;
     width: 100%;
-    height: 4px;
+    height: 8px;
     background: rgba(0, 0, 0, 0.1);
     border-radius: 2px;
     margin: 0.2rem 0;
-    cursor: pointer;
     .progress {
       height: 100%;
       background: #ffb347;
