@@ -95,13 +95,10 @@ const fetchWeather = async () => {
       weather: string
       city: string
     }
-    const weatherData: WeatherInfo = await $fetch(
-      'https://api.skrepy.dpdns.org/api/get_weather',
-      {
-        method: 'POST',
-        body: { location: cityPinyin },
-      }
-    )
+    const weatherData: WeatherInfo = await $fetch('/api/weather', {
+      method: 'POST',
+      body: { location: cityPinyin },
+    })
 
     if (weatherData) {
       temperature.value = weatherData['temperature']

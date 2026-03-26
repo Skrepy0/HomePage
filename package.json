@@ -17,6 +17,7 @@
     "@meting/core": "^1.6.1",
     "axios": "^1.13.6",
     "chinese-lunar": "^0.1.4",
+    "dotenv": "^17.3.1",
     "lunar-calendar": "^0.1.4",
     "lunar-javascript": "^1.7.7",
     "meting": "^2.0.2",
@@ -27,6 +28,7 @@
     "vue-router": "^5.0.3"
   },
   "devDependencies": {
+    "@types/node": "^25.5.0",
     "prettier": "^3.8.1",
     "sass": "^1.98.0",
     "vite-plugin-node-polyfills": "^0.25.0"
