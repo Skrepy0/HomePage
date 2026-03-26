@@ -44,6 +44,7 @@ const currentYear = new Date().getFullYear()
 @import '../../assets/css/main.scss';
 
 .footer {
+  padding: 10px 0;
   margin: 2rem auto;
   position: absolute;
   border-radius: 3px;
@@ -86,22 +87,6 @@ const currentYear = new Date().getFullYear()
   margin-right: 0.5rem;
   vertical-align: middle;
 }
-
-///* 可选：针对小屏幕调整 */
-//@media (max-width: 768px) {
-//  .footer {
-//    padding: 1rem;
-//    margin-top: 2rem;
-//  }
-//  .footer-content {
-//    flex-direction: column;
-//    gap: 0.5rem;
-//  }
-//  .commit-wrapper {
-//    display: block;
-//    margin-bottom: 0.25rem;
-//  }
-//}
 
 a {
   @extend .cursor-solid;

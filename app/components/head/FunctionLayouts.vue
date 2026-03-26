@@ -4,6 +4,7 @@
       class="music-button"
       :class="{ playing: isPlaying }"
       type="button"
+      data-tooltip="Music~"
       @click="showMusicPlayer = !showMusicPlayer"
     >
       <svg
@@ -25,7 +26,6 @@
       @close="showMusicPlayer = false"
       @playing-state-change="handlePlayingStateChange"
     />
-    <!--     今日人品按钮 -->
     <button
       class="fortune-button"
       id="fortune-button"
@@ -252,133 +252,101 @@ onMounted(() => {
   z-index: 1000;
   display: flex;
   gap: 12px;
+
+  @media (max-width: 640px) {
+    top: 12px;
+    right: 12px;
+    gap: 8px;
+  }
 }
 
 button {
   @extend .cursor-solid;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position: relative;
   width: 48px;
   height: 48px;
   border-radius: 50%;
   background: v-bind(
-    'props.isDark ? "rgba(200, 200, 200, 0.3)" : "rgba(80, 80, 80, 0.25)"'
+    '!props.isDark ? "rgba(30,30,40,0.6)" : "rgba(255,255,255,0.2)"'
   );
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(12px);
   border: 1px solid
-    v-bind('props.isDark ? "rgba(255, 255, 255, 0.3)" : "rgba(0, 0, 0, 0.3)"');
+    v-bind('props.isDark ? "rgba(255,255,255,0.25)" : "rgba(255,255,255,0.4)"');
   color: white;
-  transition: all 0.3s ease;
-  position: relative;
+  transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    transform: scale(1.08);
+    background: v-bind(
+      'props.isDark ? "rgba(50,50,70,0.8)" : "rgba(255,255,255,0.35)"'
+    );
+    border-color: v-bind(
+      'props.isDark ? "rgba(255,255,255,0.5)" : "rgba(255,255,255,0.6)"'
+    );
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  &:active {
+    transform: scale(0.96);
+    transition-duration: 0.1s;
+  }
+
+  .icon {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.2s;
+  }
+
+  @media (max-width: 640px) {
+    width: 40px;
+    height: 40px;
+    .icon {
+      width: 20px;
+      height: 20px;
+    }
+  }
 }
 
-button:hover {
-  background: v-bind(
-    'props.isDark ? "rgba(255, 255, 255, 0.5)" : "rgba(0, 0, 0, 0.3)"'
-  );
-  border-color: v-bind(
-    'props.isDark ? "rgba(255, 255, 255, 0.3)" : "rgba(0, 0, 0, 0.3)"'
-  );
-  transform: scale(1.1);
-  box-shadow: 0 6px 16px
-    v-bind('props.isDark ? "rgba(255, 255, 255, 0.3)" : "rgba(0, 0, 0, 0.3)"');
+/* 音乐按钮旋转动画 */
+.music-button.playing .icon {
+  animation: spin 2s linear infinite;
 }
 
-button:active {
-  transform: scale(0.95);
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-button .icon {
-  width: 24px;
-  height: 24px;
-  transition: transform 0.2s;
-}
-
-/* 今日人品按钮特殊样式 */
-.fortune-button {
-  position: relative;
-}
-
-.fortune-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.fortune-svg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  transform: rotate(-90deg); /* 让进度起点在顶部 */
-}
-
-.fortune-value {
-  position: relative;
-  z-index: 1;
-  font-size: 14px;
-  font-weight: bold;
-  color: white;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-  pointer-events: none; /* 让文字不干扰点击 */
-}
-
-/* 悬浮提示（tooltip） */
+/* 统一 tooltip 样式 */
+[class$='-button']::after,
 .fortune-button::after {
-  content: v-bind(tooltipText);
+  content: attr(data-tooltip);
   position: absolute;
-  bottom: -30px;
+  bottom: -36px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
   color: white;
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: 6px 12px;
+  border-radius: 20px;
   font-size: 12px;
   white-space: nowrap;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s;
-  backdrop-filter: blur(4px);
+  z-index: 10;
+  font-weight: 500;
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
-
+[class$='-button']:hover::after,
 .fortune-button:hover::after {
   opacity: 1;
 }
 
-/* 原有两个按钮的 tooltip 样式保持不变（略） */
-.transform-bg-button,
-.transform-light-button {
-  position: relative;
-}
-
-.transform-bg-button::after,
-.transform-light-button::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  bottom: -30px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.6);
-  color: white;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 12px;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s;
-  backdrop-filter: blur(4px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
+/* 特定按钮 tooltip 文本 */
 .transform-bg-button::after {
   content: '切换背景';
 }
@@ -388,44 +356,36 @@ button .icon {
 .fortune-button::after {
   content: attr(aria-label);
 }
-.transform-bg-button:hover::after,
-.transform-light-button:hover::after {
-  opacity: 1;
-}
 
-/* 响应式调整 */
-@media (max-width: 640px) {
-  .function-buttons {
-    top: 12px;
-    right: 12px;
+/* 今日人品按钮内部结构 */
+.fortune-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.fortune-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+  circle {
+    transition: stroke-dashoffset 0.3s;
   }
-  button {
-    width: 40px;
-    height: 40px;
-  }
-  button .icon {
-    width: 20px;
-    height: 20px;
-  }
-  .fortune-value {
+}
+.fortune-value {
+  position: relative;
+  z-index: 1;
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  @media (max-width: 640px) {
     font-size: 12px;
   }
-  .fortune-svg circle {
-    stroke-width: 2.5;
-  }
-}
-/* 旋转动画 */
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* 音乐按钮播放时图标旋转 */
-.music-button.playing .icon {
-  animation: spin 2s linear infinite;
 }
 </style>
