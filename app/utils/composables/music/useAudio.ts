@@ -1,3 +1,4 @@
+import { Song } from '~/types/music'
 export function useAudio(
   currentSong: Ref<Song | undefined>,
   volume: Ref<number>,

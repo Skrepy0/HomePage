@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue'
 import { Song } from '~/types/music'
 
 export function usePlaylist(onSongChange: () => void) {
@@ -31,14 +31,13 @@ export function usePlaylist(onSongChange: () => void) {
     loading.value = true
     error.value = ''
     try {
-      const res = await fetch('/api/netease')
+      const res = await fetch('/api/musics')
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const data = await res.json()
       if (data.code === 200 && data.data?.length) {
         songs.value = data.data
         // 随机选择初始歌曲
-        const randomIndex = Math.floor(Math.random() * songs.value.length)
-        currentIndex.value = randomIndex
+        currentIndex.value = Math.floor(Math.random() * songs.value.length)
         onSongChange()
       } else {
         error.value = data.message || '获取歌单失败'
