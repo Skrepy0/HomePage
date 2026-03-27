@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
           play_url: song.url,
           pic_url: song.pic,
         }))
-        .filter((song) => song.play_url)
+        .filter((song) => song.play_url !== '')
 
       if (songs.length > 0) {
         return { code: 200, data: songs }
