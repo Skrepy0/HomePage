@@ -59,7 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import BackgroundCarousel from '~/components/BackgroundCarousel.vue'
+import BackgroundCarousel from '../components/BackgroundCarousel.vue'
 import { backgroundImageUrls } from '~/utils/background/backgroundImages'
 import FunctionLayouts from '~/components/head/FunctionLayouts.vue'
 import { ref, onMounted } from 'vue'
@@ -73,6 +73,7 @@ import LinkBlocks from '~/components/cards/LinkBlocks.vue'
 import Weather from '~/components/head/Weather.vue'
 import { config } from '~/config'
 import GithubCommit from '~/components/cards/github/GithubCommit.vue'
+import Toast from '~/components/Toast.vue'
 const isDark = ref(false)
 const profileCardRef = ref<InstanceType<typeof ProfileCard>>()
 const blogCards = ref(config.blog_cards)

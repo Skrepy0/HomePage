@@ -171,7 +171,6 @@ const props = defineProps<{
   isDark?: boolean
 }>()
 
-// 第 28 行附近，将 defineEmits 改为：
 const emit = defineEmits(['close', 'playingStateChange'])
 
 const playerRef = ref<HTMLElement | null>(null)

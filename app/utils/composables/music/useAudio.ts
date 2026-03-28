@@ -1,17 +1,21 @@
 import { Song } from '~/types/music'
+import { ref, Ref } from 'vue'
+import { useToast } from '../useToast'
+
 export function useAudio(
   currentSong: Ref<Song | undefined>,
   volume: Ref<number>,
   onEnded: () => void
 ) {
   const audio = ref<HTMLAudioElement | null>(null)
-  const isPlaying = ref(false) // 初始为 false
+  const isPlaying = ref(false)
   const currentTime = ref(0)
   const duration = ref(0)
+  const error = ref<string | null>(null)
 
-  // 播放方法
   const play = () => {
     if (!audio.value) return
+    error.value = null // 清除之前的错误
     audio.value
       .play()
       .then(() => {
@@ -19,9 +23,8 @@ export function useAudio(
       })
       .catch((e) => {
         console.warn('播放失败', e)
-        isPlaying.value = false // 失败时重置为 false
-        // 可选：触发 onEnded 自动下一首
-        onEnded()
+        isPlaying.value = false
+        error.value = '播放失败，请稍后重试'
       })
   }
 
@@ -41,8 +44,12 @@ export function useAudio(
       audio.value.pause()
       audio.value = null
     }
+    error.value = null // 重置错误
     const song = currentSong.value
-    if (!song || !song.play_url) return
+    if (!song || !song.play_url) {
+      error.value = '歌曲链接无效'
+      return
+    }
 
     const audioEl = new Audio(song.play_url)
     audioEl.volume = volume.value
@@ -57,12 +64,10 @@ export function useAudio(
       onEnded()
     })
     audioEl.addEventListener('error', () => {
-      console.warn('音频错误，自动下一首')
-      onEnded()
+      console.warn('音频错误')
+      error.value = '音频加载失败，请检查网络或稍后重试'
     })
-
     audio.value = audioEl
-    // 关键：初始状态不自动播放，仅当用户主动点击或切换歌曲后保持播放状态时才播放
     if (isPlaying.value) {
       play()
     }
@@ -86,6 +91,7 @@ export function useAudio(
     isPlaying,
     currentTime,
     duration,
+    error, // 暴露错误状态
     initAudio,
     play,
     pause,
