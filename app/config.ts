@@ -44,19 +44,19 @@ export const config = {
   blog_cards: [
     {
       id: 2,
-      title: '没了',
-      description: 'qwq',
-      link: '#',
-      linkText: 'qwq',
-      icon: 'mdi:note-text',
+      title: 'Blog',
+      description: 'SkrepyのBlog',
+      link: 'https://blog.skrepy.dpdns.org',
+      linkText: '去看看？',
+      icon: 'mdi:blog',
     },
     {
       id: 1,
-      title: '还是没了',
+      title: '没了',
       description: 'QWQ',
       link: '#',
       linkText: 'QWQ',
-      icon: 'mdi:blog',
+      icon: 'mdi:note-text',
     },
   ],
 }

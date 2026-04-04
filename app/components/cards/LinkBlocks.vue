@@ -86,7 +86,7 @@ a {
 }
 
 .card-title {
-  font-size: 0.9rem;
+  font-size: 1.2rem;
   font-weight: 600;
   margin: 0;
   white-space: nowrap;
@@ -95,19 +95,19 @@ a {
 }
 
 .card-description {
-  font-size: 0.7rem;
+  font-size: 0.9rem;
   line-height: 1.4;
   color: rgba(255, 255, 255, 0.8);
   margin-bottom: 0.6rem;
   flex: 1;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
 .card-link {
-  font-size: 0.7rem;
+  font-size: 0.95rem;
   color: rgba(112, 255, 104, 0.9);
   text-decoration: none;
   align-self: flex-start;
@@ -117,23 +117,12 @@ a {
     transform: translateX(2px);
   }
 }
-@media (max-width: 768px) {
-  .double-card-horizontal {
-    //width: 105%;
-  }
-  .horizontal-card {
-    //width: 108%;
-  }
-}
 /* 移动端：宽度自适应，卡片垂直排列 */
 @media (max-width: 480px) {
   .double-card-horizontal {
     //width: 108%;
     flex-direction: row;
     gap: 0.8rem;
-  }
-  .horizontal-card {
-    //width: 100%;
   }
 }
 </style>
