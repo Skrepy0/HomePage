@@ -59,6 +59,7 @@ a {
 
 .horizontal-card {
   @extend .container-base;
+  font-family: 'Comic', system-ui, sans-serif;
   flex: 1; /* 各占一半宽度 */
   background: v-bind(
     'props.isDark ? "rgba(155, 155, 155, 0.3)" : "rgba(0, 0, 0, 0.3)"'
