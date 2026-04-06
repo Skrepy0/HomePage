@@ -59,8 +59,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useGithubLanguages } from '~/utils/composables/github/useGithubLanguages'
-import { LanguageColors } from '~/utils/init/initLanguageColors'
+import { useGithubLanguages } from '../../../utils/composables/github/useGithubLanguages'
+import { LanguageColors } from '../../../utils/init/initLanguageColors'
 import GithubCommit from './GithubCommit.vue'
 
 const props = defineProps<{
@@ -74,7 +74,7 @@ const {
   loading: langLoading,
   error: langError,
   fetchTopLanguages,
-} = useGithubLanguages('Skrepy0')
+} = useGithubLanguages('Skrepy0', useRuntimeConfig().languageToken)
 
 const retryLanguages = () => {
   if (langLoading.value) return
